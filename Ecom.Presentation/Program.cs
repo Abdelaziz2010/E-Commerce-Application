@@ -1,5 +1,6 @@
 
 using Ecom.Infrastructure.Extensions;
+using Ecom.Application.Extensions;
 
 namespace Ecom.Presentation
 {
@@ -18,6 +19,10 @@ namespace Ecom.Presentation
 
             // Pass the configuration to AddInfrastructureServices
             builder.Services.AddInfrastructureServices(builder.Configuration);
+
+
+            builder.Services.AddApplicationServices();
+
 
 
 

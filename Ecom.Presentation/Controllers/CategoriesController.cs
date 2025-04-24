@@ -1,4 +1,5 @@
-﻿using Ecom.Application.DTOs;
+﻿using AutoMapper;
+using Ecom.Application.DTOs;
 using Ecom.Application.Interfaces.Repositories;
 using Ecom.Domain.Entities.Product;
 using Microsoft.AspNetCore.Http;
@@ -8,9 +9,8 @@ namespace Ecom.Presentation.Controllers
 {
     public class CategoriesController : BaseController
     {
-        public CategoriesController(IUnitOfWork work) : base(work)
+        public CategoriesController(IUnitOfWork work,IMapper mapper) : base(work,mapper)
         {
-            
         }
 
         //Ok
@@ -68,11 +68,13 @@ namespace Ecom.Presentation.Controllers
         {
             try
             {
-                var category = new Category
-                {
-                    Name = categoryDTO.Name,
-                    Description = categoryDTO.Description,
-                };
+                var category = mapper.Map<Category>(categoryDTO);
+
+                //var category = new Category
+                //{
+                //    Name = categoryDTO.Name,
+                //    Description = categoryDTO.Description,
+                //};
 
                 await work.CategoryRepository.AddAsync(category);
 
@@ -90,12 +92,13 @@ namespace Ecom.Presentation.Controllers
         {
             try
             {
-                var newCategory = new Category
-                {
-                    Id = updateCategoryDTO.Id,
-                    Name = updateCategoryDTO.Name,
-                    Description = updateCategoryDTO.Description,
-                };
+                var newCategory = mapper.Map<Category>(updateCategoryDTO);
+                //var newCategory = new Category
+                //{
+                //    Id = updateCategoryDTO.Id,
+                //    Name = updateCategoryDTO.Name,
+                //    Description = updateCategoryDTO.Description,
+                //};
 
                 await work.CategoryRepository.UpdateAsync(newCategory);
 
@@ -119,7 +122,6 @@ namespace Ecom.Presentation.Controllers
             }
             catch (Exception)
             {
-
                 return BadRequest();
             }
         }
