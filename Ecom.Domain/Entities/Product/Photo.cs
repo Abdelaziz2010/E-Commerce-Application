@@ -12,7 +12,7 @@ namespace Ecom.Domain.Entities.Product
         public string ImageName { get; set; }
         public int ProductId { get; set; }
         // Navigation property
-        [ForeignKey(nameof(ProductId))]
-        public virtual Product Product { get; set; }
+        // [ForeignKey(nameof(ProductId))]
+        // public virtual Product Product { get; set; }
     }
 }

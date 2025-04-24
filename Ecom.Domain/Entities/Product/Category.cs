@@ -12,6 +12,6 @@ namespace Ecom.Domain.Entities.Product
         public string Description { get; set; }
 
         // Navigation property for related Products
-        public ICollection<Product> Products { get; set; } = new HashSet<Product>();
+        // public ICollection<Product> Products { get; set; } = new HashSet<Product>();
     }
 }
