@@ -2,6 +2,7 @@
 using Ecom.Application.DTOs;
 using Ecom.Application.Interfaces.Repositories;
 using Ecom.Domain.Entities.Product;
+using Ecom.Presentation.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,7 +35,7 @@ namespace Ecom.Presentation.Controllers
 
                 if (categories is null)
                 {
-                    return BadRequest();
+                    return BadRequest(new ResponseAPI(400));
                 }
                 return Ok(categories);
             }
@@ -53,7 +54,7 @@ namespace Ecom.Presentation.Controllers
 
                 if(category is null)
                 {
-                    return NotFound("category is not found");
+                    return BadRequest(new ResponseAPI(400, $"not found category id = {id}"));
                 }
                 return Ok(category);
             }
@@ -70,15 +71,9 @@ namespace Ecom.Presentation.Controllers
             {
                 var category = mapper.Map<Category>(categoryDTO);
 
-                //var category = new Category
-                //{
-                //    Name = categoryDTO.Name,
-                //    Description = categoryDTO.Description,
-                //};
-
                 await work.CategoryRepository.AddAsync(category);
 
-                return Ok(new { Message = "Item has been added" });
+                return Ok(new ResponseAPI(200, "Item has been added"));
 
             }
             catch (Exception ex)
@@ -93,21 +88,15 @@ namespace Ecom.Presentation.Controllers
             try
             {
                 var newCategory = mapper.Map<Category>(updateCategoryDTO);
-                //var newCategory = new Category
-                //{
-                //    Id = updateCategoryDTO.Id,
-                //    Name = updateCategoryDTO.Name,
-                //    Description = updateCategoryDTO.Description,
-                //};
 
                 await work.CategoryRepository.UpdateAsync(newCategory);
 
-                return Ok(new { Message = "Item has been updated" });
+                return Ok(new ResponseAPI(200, "Item has been updated"));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
 
@@ -118,11 +107,11 @@ namespace Ecom.Presentation.Controllers
             {
                 await work.CategoryRepository.DeleteAsync(id);
 
-                return Ok(new { Message = "Item has been deleted" });
+                return Ok(new ResponseAPI(200, "Item has been deleted"));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
 
