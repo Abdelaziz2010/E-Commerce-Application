@@ -69,6 +69,13 @@ namespace Ecom.Infrastructure.Implementation.Repositories
             return entity;
         }
 
+        public async Task<IReadOnlyList<T>> GetByConditionAsync(Expression<Func<T, bool>> condition)
+        {
+            var query = await _context.Set<T>().Where(condition).AsNoTracking().ToListAsync();
+
+            return query;
+        }
+
         public async Task AddAsync(T entity)
         {
             await _context.Set<T>().AddAsync(entity);
