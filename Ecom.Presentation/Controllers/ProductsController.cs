@@ -95,18 +95,21 @@ namespace Ecom.Presentation.Controllers
         {
             try
             {
-                var product = await work.ProductRepository.GetByIdAsync(id);
+                var product = await work.ProductRepository
+                    .GetByIdAsync(id, p => p.Photos, product => product.Category);
+
                 if (product is null)
                 {
-                    return BadRequest(new ResponseAPI(400, $"Product with id {id} not found"));
+                    return BadRequest(new ResponseAPI(400, $"Product not found"));
                 }
+
                 await work.ProductRepository.DeleteAsync(id);
 
                 return Ok(new ResponseAPI(200, "Product deleted successfully"));
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new ResponseAPI(400, ex.Message));
             }
         }
     }
