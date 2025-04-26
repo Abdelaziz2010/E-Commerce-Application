@@ -18,6 +18,10 @@ namespace Ecom.Application.Mapping
                 .ReverseMap();
 
             CreateMap<Photo, PhotoDTO>().ReverseMap();
+
+            CreateMap<AddProductDTO, Product>()
+                .ForMember(dest => dest.Photos, opt => opt.Ignore())
+                .ReverseMap();
         }
     }
 }

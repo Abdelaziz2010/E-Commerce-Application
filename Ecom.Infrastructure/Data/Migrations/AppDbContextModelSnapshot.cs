@@ -124,7 +124,10 @@ namespace Ecom.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Price")
+                    b.Property<decimal>("NewPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("OldPrice")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
@@ -140,7 +143,8 @@ namespace Ecom.Infrastructure.Data.Migrations
                             CategoryId = 1,
                             Description = "test",
                             Name = "test",
-                            Price = 10.00m
+                            NewPrice = 10.00m,
+                            OldPrice = 0m
                         },
                         new
                         {
@@ -148,7 +152,8 @@ namespace Ecom.Infrastructure.Data.Migrations
                             CategoryId = 2,
                             Description = "test2",
                             Name = "test2",
-                            Price = 20.00m
+                            NewPrice = 20.00m,
+                            OldPrice = 0m
                         },
                         new
                         {
@@ -156,7 +161,8 @@ namespace Ecom.Infrastructure.Data.Migrations
                             CategoryId = 3,
                             Description = "test3",
                             Name = "test3",
-                            Price = 30.00m
+                            NewPrice = 30.00m,
+                            OldPrice = 0m
                         });
                 });
 

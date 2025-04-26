@@ -32,7 +32,7 @@ namespace Ecom.Presentation.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new ResponseAPI(400, ex.Message));
             }
         }
         [HttpGet("get-by-id/{id}")]
@@ -54,25 +54,23 @@ namespace Ecom.Presentation.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new ResponseAPI(400, ex.Message));
             }
         }
 
 
         [HttpPost("add-product")]
-        public async Task<IActionResult> Create([FromBody]ProductDTO productDTO)
+        public async Task<IActionResult> Add(AddProductDTO productDTO)
         {
             try
             {
-                var product = mapper.Map<Product>(productDTO);
-
-                await work.ProductRepository.AddAsync(product);
+                await work.ProductRepository.AddAsync(productDTO);
 
                 return Ok(new ResponseAPI(200, "Product created successfully"));
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new ResponseAPI(400, ex.Message));
             }
         }
 

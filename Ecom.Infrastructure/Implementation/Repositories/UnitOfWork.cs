@@ -1,4 +1,7 @@
-﻿using Ecom.Application.Interfaces.Repositories;
+﻿using AutoMapper;
+using Ecom.Application.Interfaces.Repositories;
+using Ecom.Application.Services.Implementation;
+using Ecom.Application.Services.Interfaces;
 using Ecom.Infrastructure.Data;
 using System;
 using System.Collections.Generic;
@@ -10,28 +13,33 @@ namespace Ecom.Infrastructure.Implementation.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
-        //lazy initialization
         private readonly AppDbContext _context;
         private IProductRepository _productRepository;
         private ICategoryRepository _categoryRepository;
         private IPhotoRepository _photoRepository;
+        private IImageManagementService _imageManagementService;
+        private IMapper _mapper;
+
 
         //public IProductRepository ProductRepository => _productRepository ??= new ProductRepository(_context);
         //public ICategoryRepository CategoryRepository => _categoryRepository ??= new CategoryRepository(_context);
         //public IPhotoRepository PhotoRepository => _photoRepository ??= new PhotoRepository(_context);
 
-        public UnitOfWork(AppDbContext context) 
+        public UnitOfWork(AppDbContext context, IImageManagementService imageManagementService, IMapper mapper)
         {
             _context = context;
+            _imageManagementService = imageManagementService;
+            _mapper = mapper;
         }
 
+        //lazy initialization
         public IProductRepository ProductRepository 
         { 
             get
             {
                 if(_productRepository == null)
                 {
-                    _productRepository = new ProductRepository(_context);
+                    _productRepository = new ProductRepository(_context, _mapper, _imageManagementService);
                 }
                 return _productRepository;
             }
