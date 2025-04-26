@@ -13,6 +13,10 @@ namespace Ecom.Application.Services.Implementation
             this.fileProvider = fileProvider;
         }
 
+
+        /// <summary>
+        /// Add a collection of images 
+        /// </summary>
         public async Task<List<string>> AddImageAsync(IFormFileCollection files, string src)
         {
             List<string> SaveImageSrc = new List<string>();

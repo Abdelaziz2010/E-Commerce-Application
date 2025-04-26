@@ -18,10 +18,12 @@ namespace Ecom.Presentation
             builder.Services.AddSwaggerGen();
 
             // Pass the configuration to AddInfrastructureServices
+            
             builder.Services.AddInfrastructureServices(builder.Configuration);
 
 
             builder.Services.AddApplicationServices();
+
 
 
 

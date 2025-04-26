@@ -5,6 +5,7 @@ using Ecom.Domain.Entities.Product;
 using Ecom.Presentation.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Ecom.Presentation.Controllers
 {
@@ -25,6 +26,45 @@ namespace Ecom.Presentation.Controllers
         //NotFound
         //Forbid
         //NoContent
+
+
+
+        // Return the image as a byte array in a WebAPI response
+        [HttpGet("get-image")]
+        public IActionResult GetImage()
+        {
+            byte[] imageBytes = System.IO.File.ReadAllBytes("wwwroot/images/important.jpg");
+            return File(imageBytes, "image/jpeg"); // MIME type: image/jpeg
+        }
+
+
+        // Return the video as a byte array in a WebAPI response
+        [HttpGet("get-video")]
+        public IActionResult GetVideo()
+        {
+            byte[] videoBytes = System.IO.File.ReadAllBytes("wwwroot/images/dddddd.mp4");
+            return File(videoBytes, "video/mp4"); // MIME type: video/mp4
+        }
+
+        [HttpPost("add-image")]
+        public async Task<IActionResult> UploadImage(IFormFile file)
+        {
+           
+            // Check if the file is null or empty
+            if (file == null || file.Length == 0)
+                return BadRequest("File not selected");
+           
+            using (var memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream);
+                byte[] imageBytes = memoryStream.ToArray(); // Convert to byte[]
+
+                // Process or save to database (e.g., as a BLOB)
+                //await _dbContext.Images.AddAsync(new Image { Data = imageBytes });
+                //await _dbContext.SaveChangesAsync();
+            }
+            return Ok();
+        }
 
         [HttpGet("get-all")]
         public async Task<IActionResult> GetAll()

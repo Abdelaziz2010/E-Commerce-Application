@@ -20,7 +20,7 @@ namespace Ecom.Presentation.Controllers
             try
             {
                 var products = await work.ProductRepository
-                    .GetAllAsync(p => p.Category, products => products.Photos);
+                    .GetAllAsync(p => p.Category, p => p.Photos);
 
                 var result = mapper.Map<List<ProductDTO>>(products);
 
@@ -41,7 +41,7 @@ namespace Ecom.Presentation.Controllers
             try
             {
                 var product = await work.ProductRepository
-                    .GetByIdAsync(id, p => p.Category, product => product.Photos);
+                    .GetByIdAsync(id, p => p.Category, p => p.Photos);
 
                 var result = mapper.Map<ProductDTO>(product);
 
@@ -60,7 +60,7 @@ namespace Ecom.Presentation.Controllers
 
 
         [HttpPost("add-product")]
-        public async Task<IActionResult> Create(ProductDTO productDTO)
+        public async Task<IActionResult> Create([FromBody]ProductDTO productDTO)
         {
             try
             {
@@ -77,7 +77,7 @@ namespace Ecom.Presentation.Controllers
         }
 
         [HttpPut("update-product")]
-        public async Task<IActionResult> Update(ProductDTO productDTO)
+        public async Task<IActionResult> Update([FromBody] ProductDTO productDTO)
         {
             try
             {
@@ -100,7 +100,7 @@ namespace Ecom.Presentation.Controllers
 
 
         [HttpDelete("delete-product/{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete([FromRoute]int id)
         {
             try
             {
