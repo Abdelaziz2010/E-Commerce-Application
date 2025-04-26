@@ -14,7 +14,7 @@ namespace Ecom.Application.Extensions
             services.AddSingleton<IFileProvider>(
                 new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
 
-            services.AddScoped<IImageManagementService, ImageManagementService>();
+            services.AddSingleton<IImageManagementService, ImageManagementService>();
 
             return services;
         }

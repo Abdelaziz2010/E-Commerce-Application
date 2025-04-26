@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Ecom.Application.DTOs;
+using Ecom.Application.DTOs.Category;
 using Ecom.Application.Interfaces.Repositories;
 using Ecom.Domain.Entities.Product;
 using Ecom.Presentation.Helpers;
@@ -66,7 +66,7 @@ namespace Ecom.Presentation.Controllers
             return Ok();
         }
 
-        [HttpGet("get-all")]
+        [HttpGet("Get-All")]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -85,7 +85,7 @@ namespace Ecom.Presentation.Controllers
             }            
         }
 
-        [HttpGet("get-by-id/{id}")]
+        [HttpGet("Get-By-Id/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             try
@@ -104,7 +104,7 @@ namespace Ecom.Presentation.Controllers
             }
         }
 
-        [HttpPost("add-category")]
+        [HttpPost("Add-Category")]
         public async Task<IActionResult> Add(CategoryDTO categoryDTO)
         {
             try
@@ -122,7 +122,7 @@ namespace Ecom.Presentation.Controllers
             }
         }
 
-        [HttpPut("update-category")]
+        [HttpPut("Update-Category")]
         public async Task<IActionResult> Update(UpdateCategoryDTO updateCategoryDTO)
         {
             try
@@ -140,7 +140,7 @@ namespace Ecom.Presentation.Controllers
             }
         }
 
-        [HttpDelete("delete-category/{id}")]
+        [HttpDelete("Delete-Category/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             try

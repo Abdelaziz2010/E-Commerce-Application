@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Ecom.Application.DTOs;
+using Ecom.Application.DTOs.Product;
 using Ecom.Application.Interfaces.Repositories;
 using Ecom.Domain.Entities.Product;
 using Ecom.Presentation.Helpers;
@@ -14,7 +14,7 @@ namespace Ecom.Presentation.Controllers
         {
         }
 
-        [HttpGet("get-all")]
+        [HttpGet("Get-All")]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -35,7 +35,7 @@ namespace Ecom.Presentation.Controllers
                 return BadRequest(new ResponseAPI(400, ex.Message));
             }
         }
-        [HttpGet("get-by-id/{id}")]
+        [HttpGet("Get-By-Id/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             try
@@ -59,7 +59,7 @@ namespace Ecom.Presentation.Controllers
         }
 
 
-        [HttpPost("add-product")]
+        [HttpPost("Add-Product")]
         public async Task<IActionResult> Add(AddProductDTO productDTO)
         {
             try
@@ -74,19 +74,12 @@ namespace Ecom.Presentation.Controllers
             }
         }
 
-        [HttpPut("update-product")]
-        public async Task<IActionResult> Update([FromBody] ProductDTO productDTO)
+        [HttpPut("Update-Product")]
+        public async Task<IActionResult> Update(UpdateProductDTO updateProductDTO)
         {
             try
             {
-                var product = mapper.Map<Product>(productDTO);
-                                
-                if (product is null)
-                {
-                    return BadRequest(new ResponseAPI(400));
-                }
-
-                await work.ProductRepository.UpdateAsync(product);
+                await work.ProductRepository.UpdateAsync(updateProductDTO);
 
                 return Ok(new ResponseAPI(200, "Product updated successfully"));
             }
@@ -97,8 +90,8 @@ namespace Ecom.Presentation.Controllers
         }
 
 
-        [HttpDelete("delete-product/{id}")]
-        public async Task<IActionResult> Delete([FromRoute]int id)
+        [HttpDelete("Delete-Product/{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
             try
             {

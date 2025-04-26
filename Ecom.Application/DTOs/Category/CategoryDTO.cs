@@ -1,5 +1,4 @@
-﻿
-namespace Ecom.Application.DTOs
+﻿namespace Ecom.Application.DTOs.Category
 {
     public record CategoryDTO
         ( string Name , string Description);

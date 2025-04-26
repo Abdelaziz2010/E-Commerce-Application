@@ -1,4 +1,4 @@
-﻿using Ecom.Application.DTOs;
+﻿using Ecom.Application.DTOs.Product;
 using Ecom.Domain.Entities.Product;
 using System;
 using System.Collections.Generic;
@@ -13,6 +13,7 @@ namespace Ecom.Application.Interfaces.Repositories
         // Add any additional methods specific to Product repository here
         // For future functionality
 
-        Task<bool> AddAsync(AddProductDTO productDTO);
+        Task<bool> AddAsync(AddProductDTO addProductDTO);
+        Task<bool> UpdateAsync(UpdateProductDTO updateProductDTO);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Ecom.Application.DTOs;
+using Ecom.Application.DTOs.Product;
 using Ecom.Domain.Entities.Product;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,10 @@ namespace Ecom.Application.Mapping
             CreateMap<Photo, PhotoDTO>().ReverseMap();
 
             CreateMap<AddProductDTO, Product>()
+                .ForMember(dest => dest.Photos, opt => opt.Ignore())
+                .ReverseMap();
+
+            CreateMap<UpdateProductDTO, Product>()
                 .ForMember(dest => dest.Photos, opt => opt.Ignore())
                 .ReverseMap();
         }

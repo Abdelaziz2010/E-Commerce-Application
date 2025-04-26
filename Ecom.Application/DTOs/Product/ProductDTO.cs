@@ -1,4 +1,4 @@
-﻿namespace Ecom.Application.DTOs
+﻿namespace Ecom.Application.DTOs.Product
 {
     public record ProductDTO
     {

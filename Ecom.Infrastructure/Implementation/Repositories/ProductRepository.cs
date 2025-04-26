@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
-using Ecom.Application.DTOs;
+using Ecom.Application.DTOs.Product;
 using Ecom.Application.Interfaces.Repositories;
 using Ecom.Application.Services.Interfaces;
 using Ecom.Domain.Entities.Product;
 using Ecom.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,6 +57,66 @@ namespace Ecom.Infrastructure.Implementation.Repositories
 
             return true;
 
+        }
+
+        public async Task<bool> UpdateAsync(UpdateProductDTO updateProductDTO)
+        {
+            if (updateProductDTO is null)
+            {
+                return false;
+            }
+
+            var FindProduct = await context.Products
+                .Include(p => p.Category).Include(p => p.Photos)
+                .FirstOrDefaultAsync(p => p.Id == updateProductDTO.Id);
+
+            if (FindProduct is null)
+            {
+                return false;
+            }
+
+            mapper.Map(updateProductDTO, FindProduct);
+
+            //Update the properties of the existing product this is what mappper.Map() is doing
+
+            //FindProduct.Name = updateProductDTO.Name;
+            //FindProduct.Description = updateProductDTO.Description;
+            //FindProduct.CategoryId = updateProductDTO.CategoryId;
+            //FindProduct.NewPrice = updateProductDTO.NewPrice;
+            //FindProduct.OldPrice = updateProductDTO.OldPrice;
+
+
+            //if the user does not want to change the image, we do not need to delete the old image
+
+            if (updateProductDTO.Photos?.Count > 0 ) 
+            {
+
+                var FindPhotos = await context.Photos
+                    .Where(p => p.ProductId == updateProductDTO.Id)
+                    .ToListAsync();
+
+                foreach (var photo in FindPhotos)
+                {
+                    imageManagementService.DeleteImageAsync(photo.ImageName);
+                }
+
+                context.Photos.RemoveRange(FindPhotos);
+
+
+                var ImagePath = await imageManagementService.AddImageAsync(updateProductDTO.Photos, updateProductDTO.Name);
+
+                var photos = ImagePath.Select(path => new Photo
+                {
+                    ImageName = path,
+                    ProductId = updateProductDTO.Id
+                }).ToList();
+
+                await context.Photos.AddRangeAsync(photos); 
+            }
+
+            await context.SaveChangesAsync();
+
+            return true;
         }
     }
 }
