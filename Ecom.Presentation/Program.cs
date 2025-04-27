@@ -1,6 +1,7 @@
 
 using Ecom.Infrastructure.Extensions;
 using Ecom.Application.Extensions;
+using Ecom.Presentation.Middlewares;
 
 namespace Ecom.Presentation
 {
@@ -36,6 +37,8 @@ namespace Ecom.Presentation
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseMiddleware<ExceptionsMiddleware>();
 
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
