@@ -88,7 +88,7 @@ namespace Ecom.Infrastructure.Implementation.Repositories
 
             //if the user does not want to change the image, we do not need to delete the old image
 
-            if (updateProductDTO.Photos?.Count > 0 ) 
+            if (updateProductDTO.Photos is not null ) 
             {
 
                 var FindPhotos = await context.Photos
@@ -118,5 +118,22 @@ namespace Ecom.Infrastructure.Implementation.Repositories
 
             return true;
         }
+
+        public async Task DeleteAsync(Product product)
+        {
+
+            //var photos = await context.Photos.Where(p => p.ProductId == product.Id).ToListAsync();
+
+            foreach (var photo in product.Photos)
+            {
+                 imageManagementService.DeleteImageAsync(photo.ImageName);
+            }
+            
+            context.Products.Remove(product);
+            
+            await context.SaveChangesAsync();
+
+        }
+
     }
 }

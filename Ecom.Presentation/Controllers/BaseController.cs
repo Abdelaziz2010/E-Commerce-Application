@@ -12,11 +12,6 @@ namespace Ecom.Presentation.Controllers
         protected readonly IUnitOfWork work;
         protected readonly IMapper mapper;
 
-        public BaseController(IUnitOfWork work)
-        {
-            this.work = work;
-        }
-
         public BaseController(IUnitOfWork work, IMapper mapper)
         {
             this.work = work;

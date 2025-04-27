@@ -85,7 +85,7 @@ namespace Ecom.Presentation.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new ResponseAPI(400, ex.Message));
             }
         }
 
@@ -103,7 +103,7 @@ namespace Ecom.Presentation.Controllers
                     return BadRequest(new ResponseAPI(400, $"Product not found"));
                 }
 
-                await work.ProductRepository.DeleteAsync(id);
+                await work.ProductRepository.DeleteAsync(product);
 
                 return Ok(new ResponseAPI(200, "Product deleted successfully"));
             }

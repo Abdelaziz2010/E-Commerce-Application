@@ -15,5 +15,7 @@ namespace Ecom.Application.Interfaces.Repositories
 
         Task<bool> AddAsync(AddProductDTO addProductDTO);
         Task<bool> UpdateAsync(UpdateProductDTO updateProductDTO);
+        Task DeleteAsync(Product product);
+
     }
 }
