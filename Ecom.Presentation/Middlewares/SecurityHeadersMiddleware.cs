@@ -6,7 +6,6 @@
     // X-Content-Type-Options: Prevents the browser from MIME-sniffing a response away from the declared content-type.
     // X-XSS-Protection: Enables the cross-site scripting (XSS) filter in the browser.
     // X-Frame-Options: Prevents the page from being displayed in a frame or iframe.
-   
 
     public class SecurityHeadersMiddleware
     {

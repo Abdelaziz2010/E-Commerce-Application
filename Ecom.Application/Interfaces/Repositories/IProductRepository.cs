@@ -10,9 +10,9 @@ namespace Ecom.Application.Interfaces.Repositories
 {
     public interface IProductRepository : IGenericRepository<Product>
     {
-        // Add any additional methods specific to Product repository here
-        // For future functionality
-
+        // Add any additional methods specific to Product repository here, For future functionality
+        
+        Task<IEnumerable<ProductDTO>> GetAllAsync(string sort);
         Task<bool> AddAsync(AddProductDTO addProductDTO);
         Task<bool> UpdateAsync(UpdateProductDTO updateProductDTO);
         Task DeleteAsync(Product product);
