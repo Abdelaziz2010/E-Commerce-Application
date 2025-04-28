@@ -27,32 +27,41 @@ namespace Ecom.Infrastructure.Implementation.Repositories
         }
 
 
-        public async Task<IEnumerable<ProductDTO>> GetAllAsync(string sort, int? categoryId)
+        public async Task<IEnumerable<ProductDTO>> GetAllAsync(string? sort, int? categoryId, int? pageSize, int? pageNumber)
         {
             var query = context.Products
                 .Include(p => p.Category)
                 .Include(p => p.Photos)
                 .AsNoTracking();
 
+
+            //filtering
             if(categoryId.HasValue)
             {
                 query = query.Where(p => p.CategoryId == categoryId);
             }
 
+
+            //sorting
             if(!string.IsNullOrEmpty(sort))
             {
-                switch (sort)
+                query = sort switch
                 {
-                    case "PriceAsn":
-                        query = query.OrderBy(p => p.NewPrice);
-                        break;
-                    case "PriceDes":
-                        query = query.OrderByDescending(p => p.NewPrice);
-                        break;
-                    default:
-                        query = query.OrderBy(p => p.Name);
-                        break;
-                }
+                    "PriceASC" => query.OrderBy(p => p.NewPrice),
+                    "PriceDESC" => query.OrderByDescending(p => p.NewPrice),
+                    _ => query.OrderBy(p => p.Name),
+                };
+            }
+
+            //pagination
+
+            pageNumber = pageNumber > 0 ? pageNumber : 1;
+
+            pageSize = pageSize > 0 ? pageSize : 5;
+
+            if (pageSize.HasValue && pageNumber.HasValue)
+            {
+                query = query.Skip((pageNumber.Value - 1) * pageSize.Value).Take(pageSize.Value);
             }
 
             var result = mapper.Map<List<ProductDTO>>(query);

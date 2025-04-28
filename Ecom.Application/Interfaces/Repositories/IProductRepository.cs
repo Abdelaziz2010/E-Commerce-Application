@@ -12,7 +12,7 @@ namespace Ecom.Application.Interfaces.Repositories
     {
         // Add any additional methods specific to Product repository here, For future functionality
         
-        Task<IEnumerable<ProductDTO>> GetAllAsync(string sort, int? categoryId);
+        Task<IEnumerable<ProductDTO>> GetAllAsync(string? sort, int? categoryId, int? pageSize, int? pageNumber);
         Task<bool> AddAsync(AddProductDTO addProductDTO);
         Task<bool> UpdateAsync(UpdateProductDTO updateProductDTO);
         Task DeleteAsync(Product product);

@@ -15,12 +15,12 @@ namespace Ecom.Presentation.Controllers
         }
 
         [HttpGet("Get-All")]
-        public async Task<IActionResult> GetAll(string sort, int? categoryId)
+        public async Task<IActionResult> GetAll(string? sort, int? categoryId, int? pageSize, int? pageNumber)
         {
             try
             {
                 var products = await work.ProductRepository
-                    .GetAllAsync(sort, categoryId);
+                    .GetAllAsync(sort, categoryId, pageSize, pageNumber);
 
                 //var result = mapper.Map<List<ProductDTO>>(products);
 
