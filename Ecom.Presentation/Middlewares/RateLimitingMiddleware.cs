@@ -33,7 +33,7 @@ namespace Ecom.Presentation.Middlewares
                 context.Response.StatusCode = (int)HttpStatusCode.TooManyRequests;
                 
                 var response = 
-                    new ProblemDetail((int)HttpStatusCode.TooManyRequests, "Too many requests, please try again later");
+                    new ProblemDetail((int)HttpStatusCode.TooManyRequests, "Too many requests, Please try again later");
 
                 var json = JsonSerializer.Serialize(response);
 

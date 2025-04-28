@@ -13,11 +13,22 @@ namespace Ecom.Presentation
 
             // Add services to the container.
 
+            // Add CORS configurations policy to allow requests from the client app
+
+            builder.Services.AddCors(op =>
+            {
+                op.AddPolicy("CORSPolicy",builder =>
+                {
+                    builder.AllowAnyHeader()
+                           .AllowAnyMethod()
+                           .AllowCredentials()
+                           .WithOrigins("http://localhost:4200", "https://localhost:4200");
+                });
+            });
+
             builder.Services.AddMemoryCache();
 
             builder.Services.AddControllers();
-            
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             
             builder.Services.AddEndpointsApiExplorer();
             
@@ -42,6 +53,8 @@ namespace Ecom.Presentation
                 app.UseSwaggerUI();
             }
 
+            app.UseCors("CORSPolicy");
+            
             app.UseHttpsRedirection();
 
             app.UseMiddleware<RateLimitingMiddleware>();
