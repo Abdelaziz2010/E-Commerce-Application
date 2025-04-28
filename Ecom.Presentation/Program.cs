@@ -46,13 +46,15 @@ namespace Ecom.Presentation
 
             app.UseMiddleware<RateLimitingMiddleware>();
 
+            app.UseMiddleware<SecurityHeadersMiddleware>();
+
+            app.UseMiddleware<ExceptionsMiddleware>();
+
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
-            app.UseMiddleware<ExceptionsMiddleware>();
 
             app.MapControllers();
 
