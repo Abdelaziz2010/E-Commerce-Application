@@ -15,20 +15,20 @@ namespace Ecom.Presentation.Controllers
         }
 
         [HttpGet("Get-All")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(string sort, int? categoryId)
         {
             try
             {
                 var products = await work.ProductRepository
-                    .GetAllAsync(p => p.Category, p => p.Photos);
+                    .GetAllAsync(sort, categoryId);
 
-                var result = mapper.Map<List<ProductDTO>>(products);
+                //var result = mapper.Map<List<ProductDTO>>(products);
 
-                if (result is null)
+                if (products is null)
                 {
                     return BadRequest(new ResponseAPI(400));
                 }
-                return Ok(result);
+                return Ok(products);
             }
             catch (Exception ex)
             {
