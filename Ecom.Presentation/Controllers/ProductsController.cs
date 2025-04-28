@@ -20,6 +20,7 @@ namespace Ecom.Presentation.Controllers
         {
             try
             {
+
                 var products = await work.ProductRepository
                     .GetAllAsync(productParams);
 
@@ -27,7 +28,10 @@ namespace Ecom.Presentation.Controllers
                 {
                     return BadRequest(new ResponseAPI(400));
                 }
-                return Ok(products);
+
+                var totalCount = await work.ProductRepository.CountAsync();
+
+                return Ok(new Pagination<ProductDTO>(productParams.PageNumber, productParams.PageSize, totalCount, products));
             }
             catch (Exception ex)
             {

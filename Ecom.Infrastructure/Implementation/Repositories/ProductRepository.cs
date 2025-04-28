@@ -36,7 +36,6 @@ namespace Ecom.Infrastructure.Implementation.Repositories
                 .Include(p => p.Photos)
                 .AsNoTracking();
 
-
             //Applyng Fltering
             if(productParams.CategoryId.HasValue)
             {
