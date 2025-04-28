@@ -20,7 +20,6 @@ namespace Ecom.Presentation.Controllers
         {
             try
             {
-
                 var products = await work.ProductRepository
                     .GetAllAsync(productParams);
 
@@ -38,6 +37,7 @@ namespace Ecom.Presentation.Controllers
                 return BadRequest(new ResponseAPI(400, ex.Message));
             }
         }
+
         [HttpGet("Get-By-Id/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
