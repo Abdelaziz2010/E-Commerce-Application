@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Ecom.Application.DTOs.Product;
 using Ecom.Application.Interfaces.Repositories;
+using Ecom.Application.Shared;
 using Ecom.Domain.Entities.Product;
 using Ecom.Presentation.Helpers;
 using Microsoft.AspNetCore.Http;
@@ -15,14 +16,12 @@ namespace Ecom.Presentation.Controllers
         }
 
         [HttpGet("Get-All")]
-        public async Task<IActionResult> GetAll(string? sort, int? categoryId, int? pageSize, int? pageNumber)
+        public async Task<IActionResult> GetAll([FromQuery]ProductParams productParams)
         {
             try
             {
                 var products = await work.ProductRepository
-                    .GetAllAsync(sort, categoryId, pageSize, pageNumber);
-
-                //var result = mapper.Map<List<ProductDTO>>(products);
+                    .GetAllAsync(productParams);
 
                 if (products is null)
                 {

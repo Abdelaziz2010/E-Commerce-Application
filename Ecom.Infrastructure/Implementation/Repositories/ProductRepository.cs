@@ -2,9 +2,11 @@
 using Ecom.Application.DTOs.Product;
 using Ecom.Application.Interfaces.Repositories;
 using Ecom.Application.Services.Interfaces;
+using Ecom.Application.Shared;
 using Ecom.Domain.Entities.Product;
 using Ecom.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +29,7 @@ namespace Ecom.Infrastructure.Implementation.Repositories
         }
 
 
-        public async Task<IEnumerable<ProductDTO>> GetAllAsync(string? sort, int? categoryId, int? pageSize, int? pageNumber)
+        public async Task<IEnumerable<ProductDTO>> GetAllAsync(ProductParams productParams)
         {
             var query = context.Products
                 .Include(p => p.Category)
@@ -35,17 +37,16 @@ namespace Ecom.Infrastructure.Implementation.Repositories
                 .AsNoTracking();
 
 
-            //filtering
-            if(categoryId.HasValue)
+            //Applyng Fltering
+            if(productParams.CategoryId.HasValue)
             {
-                query = query.Where(p => p.CategoryId == categoryId);
+                query = query.Where(p => p.CategoryId == productParams.CategoryId);
             }
 
-
-            //sorting
-            if(!string.IsNullOrEmpty(sort))
+            //Applyng Sorting
+            if (!string.IsNullOrEmpty(productParams.Sort))
             {
-                query = sort switch
+                query = productParams.Sort switch
                 {
                     "PriceASC" => query.OrderBy(p => p.NewPrice),
                     "PriceDESC" => query.OrderByDescending(p => p.NewPrice),
@@ -53,16 +54,8 @@ namespace Ecom.Infrastructure.Implementation.Repositories
                 };
             }
 
-            //pagination
-
-            pageNumber = pageNumber > 0 ? pageNumber : 1;
-
-            pageSize = pageSize > 0 ? pageSize : 5;
-
-            if (pageSize.HasValue && pageNumber.HasValue)
-            {
-                query = query.Skip((pageNumber.Value - 1) * pageSize.Value).Take(pageSize.Value);
-            }
+            //Applyng Pagination
+            query = query.Skip((productParams.PageNumber - 1) * productParams.PageSize).Take(productParams.PageSize);
 
             var result = mapper.Map<List<ProductDTO>>(query);
          
