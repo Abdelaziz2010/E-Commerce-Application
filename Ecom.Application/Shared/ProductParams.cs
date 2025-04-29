@@ -14,6 +14,7 @@ namespace Ecom.Application.Shared
         public string? Sort { get; set; }
         public int? CategoryId { get; set; }
         public string? Search { get; set; }
+        public int TotalCount { get; set; }
         public int PageNumber { get; set; } = 1;
         
         private int maxPageSize = 10;

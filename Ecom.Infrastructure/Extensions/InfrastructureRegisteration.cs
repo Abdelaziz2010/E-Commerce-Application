@@ -4,6 +4,7 @@ using Ecom.Infrastructure.Implementation.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,13 @@ namespace Ecom.Infrastructure.Extensions
             services.AddDbContext<AppDbContext>(option =>
             {
                 option.UseSqlServer(configuration.GetConnectionString("EcomDatabase"));
+            });
+
+            // add redis cache configuration 
+            services.AddSingleton<IConnectionMultiplexer>(options =>
+            {
+                var config = ConfigurationOptions.Parse(configuration.GetConnectionString("Redis"));
+                return ConnectionMultiplexer.Connect(config);
             });
 
             //apply UnitOfWork 

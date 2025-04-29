@@ -28,9 +28,7 @@ namespace Ecom.Presentation.Controllers
                     return BadRequest(new ResponseAPI(400));
                 }
 
-                var totalCount = await work.ProductRepository.CountAsync();
-
-                return Ok(new Pagination<ProductDTO>(productParams.PageNumber, productParams.PageSize, totalCount, products));
+                return Ok(new Pagination<ProductDTO>(productParams.PageNumber, productParams.PageSize, productParams.TotalCount, products));
             }
             catch (Exception ex)
             {

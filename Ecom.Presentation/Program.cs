@@ -53,6 +53,7 @@ namespace Ecom.Presentation
                 app.UseSwaggerUI();
             }
 
+            // Enable CORS
             app.UseCors("CORSPolicy");
             
             app.UseHttpsRedirection();

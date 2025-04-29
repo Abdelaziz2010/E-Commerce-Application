@@ -78,6 +78,8 @@ namespace Ecom.Infrastructure.Implementation.Repositories
                 query = query.OrderBy(p => p.Id);
             }
 
+            productParams.TotalCount = query.Count();
+
             // Apply Pagination
             query = query.Skip((productParams.PageNumber - 1) * productParams.PageSize).Take(productParams.PageSize);
 
