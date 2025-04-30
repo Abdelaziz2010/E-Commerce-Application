@@ -23,7 +23,7 @@ namespace Ecom.Infrastructure.Extensions
                 option.UseSqlServer(configuration.GetConnectionString("EcomDatabase"));
             });
 
-            // add redis cache configuration 
+            // add redis cache configuration to connect to redis server
             services.AddSingleton<IConnectionMultiplexer>(options =>
             {
                 var config = ConfigurationOptions.Parse(configuration.GetConnectionString("Redis"));
