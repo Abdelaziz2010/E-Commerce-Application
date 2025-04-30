@@ -3,6 +3,7 @@ using Ecom.Application.Interfaces.Repositories;
 using Ecom.Application.Services.Implementation;
 using Ecom.Application.Services.Interfaces;
 using Ecom.Infrastructure.Data;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,17 +21,19 @@ namespace Ecom.Infrastructure.Implementation.Repositories
         private ICartRepository cartRepository;
         private IImageManagementService _imageManagementService;
         private IMapper _mapper;
+        private readonly IConnectionMultiplexer _redis;
 
 
         //public IProductRepository ProductRepository => _productRepository ??= new ProductRepository(_context);
         //public ICategoryRepository CategoryRepository => _categoryRepository ??= new CategoryRepository(_context);
         //public IPhotoRepository PhotoRepository => _photoRepository ??= new PhotoRepository(_context);
 
-        public UnitOfWork(AppDbContext context, IImageManagementService imageManagementService, IMapper mapper)
+        public UnitOfWork(AppDbContext context, IImageManagementService imageManagementService, IMapper mapper, IConnectionMultiplexer redis)
         {
             _context = context;
-            _imageManagementService = imageManagementService;
+            _redis = redis;
             _mapper = mapper;
+            _imageManagementService = imageManagementService;
         }
 
         //lazy initialization
@@ -73,7 +76,7 @@ namespace Ecom.Infrastructure.Implementation.Repositories
             {
                 if (cartRepository == null)
                 {
-                    cartRepository = new CartRepository();
+                    cartRepository = new CartRepository(_redis);
                 }
                 return cartRepository;
             }
