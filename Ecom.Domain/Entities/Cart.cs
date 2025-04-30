@@ -5,12 +5,12 @@ namespace Ecom.Domain.Entities
     public class Cart
     {
         public Cart() { }
-        public Cart(int id)
+        public Cart(string id)
         {
             Id = id;
         }
 
-        public int Id { get; set; }   // Key
+        public string Id { get; set; }   // Key
         public List<CartItem> CartItems { get; set; } = new List<CartItem>();  // Value 
         //public string PaymentIntentId { get; set; }
         //public string ClientSecret { get; set; }

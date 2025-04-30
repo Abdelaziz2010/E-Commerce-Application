@@ -17,6 +17,7 @@ namespace Ecom.Infrastructure.Implementation.Repositories
         private IProductRepository _productRepository;
         private ICategoryRepository _categoryRepository;
         private IPhotoRepository _photoRepository;
+        private ICartRepository cartRepository;
         private IImageManagementService _imageManagementService;
         private IMapper _mapper;
 
@@ -66,6 +67,18 @@ namespace Ecom.Infrastructure.Implementation.Repositories
                 return _photoRepository;
             }
         }
+        public ICartRepository CartRepository
+        {
+            get
+            {
+                if (cartRepository == null)
+                {
+                    cartRepository = new CartRepository();
+                }
+                return cartRepository;
+            }
+        }
+
         public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();
