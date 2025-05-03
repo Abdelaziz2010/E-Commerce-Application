@@ -16,6 +16,9 @@ namespace Ecom.Application.Extensions
 
             services.AddSingleton<IImageManagementService, ImageManagementService>();
 
+            // Register Email Service
+            services.AddScoped<IEmailService, EmailService>();
+
             return services;
         }
 
