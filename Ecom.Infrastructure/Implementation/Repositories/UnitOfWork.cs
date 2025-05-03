@@ -15,6 +15,8 @@ namespace Ecom.Infrastructure.Implementation.Repositories
         private readonly IConnectionMultiplexer _redis;
         private readonly IMapper _mapper;
         private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
+        private readonly IEmailService _emailService;
         private readonly IImageManagementService _imageManagementService;
         private IProductRepository _productRepository;
         private ICategoryRepository _categoryRepository;
@@ -28,16 +30,20 @@ namespace Ecom.Infrastructure.Implementation.Repositories
 
         public UnitOfWork(
             AppDbContext context, 
-            IImageManagementService imageManagementService, 
-            IMapper mapper, 
+            IImageManagementService imageManagementService,
+            IMapper mapper,
             IConnectionMultiplexer redis,
-            UserManager<AppUser> userManager)
+            UserManager<AppUser> userManager,
+            SignInManager<AppUser> signInManager,
+            IEmailService emailService)
         {
             _context = context;
             _redis = redis;
             _mapper = mapper;
             _imageManagementService = imageManagementService;
             _userManager = userManager;
+            _signInManager = signInManager;
+            _emailService = emailService;
         }
 
         //lazy initialization
@@ -91,7 +97,7 @@ namespace Ecom.Infrastructure.Implementation.Repositories
             {
                 if (_authRepository == null)
                 {
-                    _authRepository = new AuthRepository(_userManager);
+                    _authRepository = new AuthRepository(_userManager,_signInManager,_emailService);
                 }
                 return _authRepository;
             }

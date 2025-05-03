@@ -4,6 +4,11 @@ namespace Ecom.Application.Shared
 {
     public class EmailStringBody
     {
+        /// <summary>
+        /// component variable is used to determine Component name in angular app
+        /// </summary>
+       
+        //for example if the component name is Active then the link will be: http://localhost:4200/Account/Active?email={email}&code={encodeToken}
         public static string SendEmailBody(string email, string token, string component,string message)
         {
             var encodeToken = Uri.EscapeDataString(token);
