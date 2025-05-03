@@ -2,38 +2,42 @@
 using Ecom.Application.Interfaces.Repositories;
 using Ecom.Application.Services.Implementation;
 using Ecom.Application.Services.Interfaces;
+using Ecom.Domain.Entities;
 using Ecom.Infrastructure.Data;
+using Microsoft.AspNetCore.Identity;
 using StackExchange.Redis;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ecom.Infrastructure.Implementation.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
         private readonly AppDbContext _context;
+        private readonly IConnectionMultiplexer _redis;
+        private readonly IMapper _mapper;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly IImageManagementService _imageManagementService;
         private IProductRepository _productRepository;
         private ICategoryRepository _categoryRepository;
         private IPhotoRepository _photoRepository;
-        private ICartRepository cartRepository;
-        private IImageManagementService _imageManagementService;
-        private IMapper _mapper;
-        private readonly IConnectionMultiplexer _redis;
-
+        private ICartRepository _cartRepository;
+        private IAuthRepository _authRepository;
 
         //public IProductRepository ProductRepository => _productRepository ??= new ProductRepository(_context);
         //public ICategoryRepository CategoryRepository => _categoryRepository ??= new CategoryRepository(_context);
         //public IPhotoRepository PhotoRepository => _photoRepository ??= new PhotoRepository(_context);
 
-        public UnitOfWork(AppDbContext context, IImageManagementService imageManagementService, IMapper mapper, IConnectionMultiplexer redis)
+        public UnitOfWork(
+            AppDbContext context, 
+            IImageManagementService imageManagementService, 
+            IMapper mapper, 
+            IConnectionMultiplexer redis,
+            UserManager<AppUser> userManager)
         {
             _context = context;
             _redis = redis;
             _mapper = mapper;
             _imageManagementService = imageManagementService;
+            _userManager = userManager;
         }
 
         //lazy initialization
@@ -74,17 +78,23 @@ namespace Ecom.Infrastructure.Implementation.Repositories
         {
             get
             {
-                if (cartRepository == null)
+                if (_cartRepository == null)
                 {
-                    cartRepository = new CartRepository(_redis);
+                    _cartRepository = new CartRepository(_redis);
                 }
-                return cartRepository;
+                return _cartRepository;
             }
         }
-
-        public async Task<int> SaveChangesAsync()
+        public IAuthRepository AuthRepository
         {
-            return await _context.SaveChangesAsync();
+            get
+            {
+                if (_authRepository == null)
+                {
+                    _authRepository = new AuthRepository(_userManager);
+                }
+                return _authRepository;
+            }
         }
     }
 }

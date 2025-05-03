@@ -14,7 +14,5 @@ namespace Ecom.Domain.Entities
 
         [ForeignKey(nameof(AppUserId))]
         public virtual AppUser AppUser { get; set; }
-
-
     }
 }

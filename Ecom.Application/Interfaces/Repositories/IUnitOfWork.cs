@@ -12,6 +12,6 @@ namespace Ecom.Application.Interfaces.Repositories
         ICategoryRepository CategoryRepository { get; }
         IPhotoRepository PhotoRepository { get; }
         ICartRepository CartRepository { get; }
-        Task<int> SaveChangesAsync();
+        IAuthRepository AuthRepository { get; }
     }
 }
