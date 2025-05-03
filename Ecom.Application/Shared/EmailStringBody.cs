@@ -4,7 +4,7 @@ namespace Ecom.Application.Shared
 {
     public class EmailStringBody
     {
-        public static string SendEmail(string email, string token, string component,string message)
+        public static string SendEmailBody(string email, string token, string component,string message)
         {
             var encodeToken = Uri.EscapeDataString(token);
 
