@@ -36,8 +36,8 @@ namespace Ecom.Application.Services.Implementation
                 {
                     // Connect to the SMTP server
                     await smtp.ConnectAsync(
-                        configuration["EmailSettings:Smtp"], 
-                        int.Parse(configuration["EmailSettings:Port"]),true);
+                        configuration["EmailSettings:Smtp"],
+                        int.Parse(configuration["EmailSettings:Port"]), true);
 
                     // Authenticate with the server
                     await smtp.AuthenticateAsync(

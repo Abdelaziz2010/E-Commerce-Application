@@ -11,7 +11,7 @@ namespace Ecom.Application.Shared
         //for example if the component name is Active then the link will be: http://localhost:4200/Account/Active?email={email}&code={encodeToken}
         public static string SendEmailBody(string email, string token, string component,string message)
         {
-            var encodeToken = Uri.EscapeDataString(token);
+            var encodedToken = Uri.EscapeDataString(token);
 
             return $@"
                      <html> 
@@ -43,7 +43,7 @@ namespace Ecom.Application.Shared
                           <h1>{message}</h1>
                           <hr>
                           <br>
-                          <a class=""button"" href=""http://localhost:4200/Account/{component}?email={email}&code={encodeToken}"">
+                          <a class=""button"" href=""http://localhost:4200/Account/{component}?email={email}&token={encodedToken}"">
                              {message}
                           </a>
                         </body>

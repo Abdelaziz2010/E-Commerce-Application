@@ -1,7 +1,7 @@
 ﻿
 namespace Ecom.Application.DTOs.Auth
 {
-    public record ActiveAccountDTO
+    public record ActivateAccountDTO 
     {
         public string Email { get; set; }
         public string Token { get; set; }

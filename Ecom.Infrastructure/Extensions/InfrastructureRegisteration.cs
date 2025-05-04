@@ -48,7 +48,7 @@ namespace Ecom.Infrastructure.Extensions
                 op.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             }).AddCookie(op =>
             {
-                op.Cookie.Name = "accesstoken";
+                op.Cookie.Name = "AccessToken";
                 op.Events.OnRedirectToLogin = context =>
                 {
                     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
@@ -71,7 +71,7 @@ namespace Ecom.Infrastructure.Extensions
                 {
                     OnMessageReceived = context =>
                     {
-                        context.Token = context.Request.Cookies["accesstoken"];
+                        context.Token = context.Request.Cookies["AccessToken"];
                         return Task.CompletedTask;
                     },
                 };

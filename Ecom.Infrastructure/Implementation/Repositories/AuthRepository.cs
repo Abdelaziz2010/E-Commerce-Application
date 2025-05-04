@@ -59,11 +59,11 @@ namespace Ecom.Infrastructure.Implementation.Repositories
                 return result.Errors.ToList()[0].Description;
             }
 
-            //Send Active Email
+            //Send Activate Email
 
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-            await SendEmail(user.Email, token, "Active", "Active Email", "Please click the button below to activate your account");
+            await SendEmail(user.Email, token, "Activate", "Activate Email", "Please click the button below to activate your account");
 
             return "Done";
         }
@@ -88,23 +88,23 @@ namespace Ecom.Infrastructure.Implementation.Repositories
 
             if (loginDTO is null)
             {
-                return "Please enter a valid Data!!";
+                return "Please enter a valid Data !!";
             }
 
             var user = await _userManager.FindByEmailAsync(loginDTO.Email);
             
             if (user is null)
             {
-                return "Please Register First, This Email not exists!!";
+                return "Please Register First, This Email does not exist !!";
             }
 
             if (user.EmailConfirmed is not true)
             {
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                
-                await SendEmail(user.Email, token, "Active", "Active Email", "Please click the button below to activate your account");
+                await SendEmail(user.Email, token, "Activate", "Activate Email", "Please click the button below to activate your account");
 
-                return "Please check your email to active your account, We have sent an activation link to your E-mail!!!";
+                return "Please check your email to activate your account, We have sent an activation link to your E-mail !!!";
             }
 
             var result = await _signInManager.PasswordSignInAsync(user, loginDTO.Password, false, true);
@@ -114,13 +114,13 @@ namespace Ecom.Infrastructure.Implementation.Repositories
                 return _tokenService.GenerateAccessToken(user);
             }
 
-            return "Please check your email and password, something went wrong!!!";
+            return "Please check your email and password, something went wrong !!!";
         }
 
-        public async Task<bool> SendEmailForForgetPassword(string email)
+        public async Task<bool> SendForgotPasswordEmail(string email) 
         {
 
-            if (string.IsNullOrEmpty(email))
+            if (string.IsNullOrEmpty(email)) 
             {
                 return false;
             }
@@ -163,23 +163,24 @@ namespace Ecom.Infrastructure.Implementation.Repositories
             return "Password Changed Successfully";
         }
 
-        public async Task<bool> ActivateAccount(ActiveAccountDTO activeAccountDTO)
+        public async Task<bool> ActivateAccount(ActivateAccountDTO activateAccountDTO)  // Confirm Email
         {
             
-            if (activeAccountDTO is null)
+            if (activateAccountDTO is null)
             {
                 return false;
             }
             
-            var user = await _userManager.FindByEmailAsync(activeAccountDTO.Email);
+            var user = await _userManager.FindByEmailAsync(activateAccountDTO.Email);
             
             if (user is null)
             {
                 return false;
             }
 
-            var result = await _userManager.ConfirmEmailAsync(user, activeAccountDTO.Token);
-           
+            // update the user EmailConfirmed property to true
+            var result = await _userManager.ConfirmEmailAsync(user, activateAccountDTO.Token);  
+            
             if (result.Succeeded)
             {
                 return true;
@@ -187,7 +188,7 @@ namespace Ecom.Infrastructure.Implementation.Repositories
 
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             
-            await SendEmail(user.Email, token, "Active", "Active Email", "Please click the button below to activate your account");
+            await SendEmail(user.Email, token, "Activate", "Activate Email", "Please click the button below to activate your account");
             
             return false;
         }
