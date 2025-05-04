@@ -50,9 +50,6 @@ namespace Ecom.Application.Services.Implementation
 
             string tokenString = tokenHandler.WriteToken(token);
            
-            // Log the token to ensure it looks correct
-            Console.WriteLine("Generated JWT: " + tokenString);
-            
             return tokenString;
         }
     }

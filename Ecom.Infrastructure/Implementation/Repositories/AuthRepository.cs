@@ -1,4 +1,5 @@
-﻿using Ecom.Application.DTOs;
+﻿using Azure.Core;
+using Ecom.Application.DTOs;
 using Ecom.Application.DTOs.Auth;
 using Ecom.Application.Interfaces.Repositories;
 using Ecom.Application.Services.Interfaces;
@@ -87,14 +88,14 @@ namespace Ecom.Infrastructure.Implementation.Repositories
 
             if (loginDTO is null)
             {
-                return "Invalid Data";
+                return "Please enter a valid Data!!";
             }
 
             var user = await _userManager.FindByEmailAsync(loginDTO.Email);
             
             if (user is null)
             {
-                return "This Email not exists";
+                return "Please Register First, This Email not exists!!";
             }
 
             if (user.EmailConfirmed is not true)
@@ -103,19 +104,17 @@ namespace Ecom.Infrastructure.Implementation.Repositories
                
                 await SendEmail(user.Email, token, "Active", "Active Email", "Please click the button below to activate your account");
 
-                return "Please check your email to active your account, We have sent an activation link to your E-mail";
+                return "Please check your email to active your account, We have sent an activation link to your E-mail!!!";
             }
 
             var result = await _signInManager.PasswordSignInAsync(user, loginDTO.Password, false, true);
 
-            if(result.Succeeded is not true)
+            if(result.Succeeded)
             {
-                return "Invalid Email or Password";
+                return _tokenService.GenerateAccessToken(user);
             }
 
-            var accessToken = _tokenService.GenerateAccessToken(user);
-
-            return accessToken;  // return JWT Token
+            return "Please check your email and password, something went wrong!!!";
         }
 
         public async Task<bool> SendEmailForForgetPassword(string email)

@@ -40,6 +40,7 @@ namespace Ecom.Infrastructure.Extensions
             // apply Identity
             services.AddIdentity<AppUser, IdentityRole> ().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
+            // apply Authentication 
             services.AddAuthentication(op =>
             {
                 op.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

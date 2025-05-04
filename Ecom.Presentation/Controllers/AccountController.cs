@@ -27,5 +27,34 @@ namespace Ecom.Presentation.Controllers
 
             return Ok(new ResponseAPI(200, result));
         }
+
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login(LoginDTO loginDTO)
+        {
+
+            string result = await work.AuthRepository.LoginAsync(loginDTO);
+           
+            if (result == null)
+            {
+                return BadRequest(new ResponseAPI(400));
+            }
+
+            if(result.StartsWith("Please"))
+            {
+                return BadRequest(new ResponseAPI(400, result));
+            }
+
+            Response.Cookies.Append("accesstoken", result, new CookieOptions
+            {
+                HttpOnly = true,
+                SameSite = SameSiteMode.None,
+                Secure = true,
+                IsEssential = true,
+                Domain = "localhost",
+                Expires = DateTimeOffset.UtcNow.AddMinutes(30)
+            });
+
+            return Ok(new ResponseAPI(200));
+        }
     }
 }
