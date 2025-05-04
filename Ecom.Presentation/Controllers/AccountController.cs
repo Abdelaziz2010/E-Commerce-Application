@@ -66,6 +66,14 @@ namespace Ecom.Presentation.Controllers
             return result ? Ok(new ResponseAPI(200)) : BadRequest(new ResponseAPI(200));
         }
 
-       
+        [HttpPost("Send-Email-Forget-Password")]
+        public async Task<IActionResult> ForgetPassword(string email)
+        {
+
+            var result = await work.AuthRepository.SendEmailForForgetPassword(email);
+
+            return result ? Ok(new ResponseAPI(200)) : BadRequest(new ResponseAPI(200));
+        }
+
     }
 }
