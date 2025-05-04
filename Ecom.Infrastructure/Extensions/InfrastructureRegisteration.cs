@@ -1,9 +1,11 @@
 ﻿using Ecom.Application.Interfaces.Repositories;
+using Ecom.Domain.Entities;
 using Ecom.Infrastructure.Data;
 using Ecom.Infrastructure.Implementation.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,6 +37,9 @@ namespace Ecom.Infrastructure.Extensions
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
+            // apply Identity
+            services.AddIdentity<AppUser, IdentityRole> ().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+
             services.AddAuthentication(op =>
             {
                 op.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -58,7 +63,7 @@ namespace Ecom.Infrastructure.Extensions
                     ValidateAudience = false,
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = configuration["JWTSettings:Issuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWTSettings:Key"])),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWTSettings:SecretKey"])),
                     ClockSkew = TimeSpan.Zero
                 };
                 op.Events = new JwtBearerEvents

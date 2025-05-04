@@ -47,7 +47,8 @@ namespace Ecom.Infrastructure.Implementation.Repositories
             AppUser user = new AppUser()
             {
                 Email = registerDTO.Email,
-                UserName = registerDTO.UserName
+                UserName = registerDTO.UserName,
+                DisplayName = registerDTO.UserName,
             };
 
             var result = await _userManager.CreateAsync(user, registerDTO.Password);
@@ -69,7 +70,7 @@ namespace Ecom.Infrastructure.Implementation.Repositories
         /// <summary>
         /// component variable is used to determine Component name in angular/react app
         /// </summary>
-        public async Task SendEmail(string email, string token, string component, string subject,string message)
+        private async Task SendEmail(string email, string token, string component, string subject,string message)
         {
             var result = new EmailDTO
                 (email,

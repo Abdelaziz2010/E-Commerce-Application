@@ -66,8 +66,8 @@ namespace Ecom.Presentation
 
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
-            app.UseHttpsRedirection();
-
+            app.UseAuthentication();
+            
             app.UseAuthorization();
 
             app.MapControllers();
