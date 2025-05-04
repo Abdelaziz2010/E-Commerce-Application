@@ -18,15 +18,12 @@ namespace Ecom.Infrastructure.Implementation.Repositories
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IEmailService _emailService;
         private readonly IImageManagementService _imageManagementService;
+        private readonly ITokenService _tokenService;
         private IProductRepository _productRepository;
         private ICategoryRepository _categoryRepository;
         private IPhotoRepository _photoRepository;
         private ICartRepository _cartRepository;
         private IAuthRepository _authRepository;
-
-        //public IProductRepository ProductRepository => _productRepository ??= new ProductRepository(_context);
-        //public ICategoryRepository CategoryRepository => _categoryRepository ??= new CategoryRepository(_context);
-        //public IPhotoRepository PhotoRepository => _photoRepository ??= new PhotoRepository(_context);
 
         public UnitOfWork(
             AppDbContext context, 
@@ -35,7 +32,8 @@ namespace Ecom.Infrastructure.Implementation.Repositories
             IConnectionMultiplexer redis,
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
-            IEmailService emailService)
+            IEmailService emailService, 
+            ITokenService tokenService)
         {
             _context = context;
             _redis = redis;
@@ -44,9 +42,10 @@ namespace Ecom.Infrastructure.Implementation.Repositories
             _userManager = userManager;
             _signInManager = signInManager;
             _emailService = emailService;
+            _tokenService = tokenService;
         }
 
-        //lazy initialization
+        //Lazy Initialization
         public IProductRepository ProductRepository 
         { 
             get
@@ -97,7 +96,7 @@ namespace Ecom.Infrastructure.Implementation.Repositories
             {
                 if (_authRepository == null)
                 {
-                    _authRepository = new AuthRepository(_userManager,_signInManager,_emailService);
+                    _authRepository = new AuthRepository(_userManager,_signInManager,_emailService,_tokenService);
                 }
                 return _authRepository;
             }

@@ -19,7 +19,7 @@ namespace Ecom.Application.Services.Implementation
 
             MimeMessage message = new MimeMessage();
 
-            message.From.Add(new MailboxAddress("My Ecom", configuration["EmailSetting:From"]));
+            message.From.Add(new MailboxAddress("My Ecom", configuration["EmailSettings:From"]));
 
             message.Subject = emailDTO.Subject;
 
@@ -36,13 +36,13 @@ namespace Ecom.Application.Services.Implementation
                 {
                     // Connect to the SMTP server
                     await smtp.ConnectAsync(
-                        configuration["EmailSetting:Smtp"], 
-                        int.Parse(configuration["EmailSetting:Port"]),true);
+                        configuration["EmailSettings:Smtp"], 
+                        int.Parse(configuration["EmailSettings:Port"]),true);
 
                     // Authenticate with the server
                     await smtp.AuthenticateAsync(
-                        configuration["EmailSetting:UserName"],
-                        configuration["EmailSetting:Password"]);
+                        configuration["EmailSettings:UserName"],
+                        configuration["EmailSettings:Password"]);
 
                     // Send the email
                     await smtp.SendAsync(message);

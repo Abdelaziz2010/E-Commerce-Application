@@ -9,6 +9,6 @@ namespace Ecom.Application.Services.Interfaces
 {
     public interface ITokenService
     {
-        Task<string> GenerateToken(AppUser user);
+        string GenerateAccessToken(AppUser user);
     }
 }
