@@ -66,7 +66,9 @@ namespace Ecom.Infrastructure.Implementation.Repositories
             return "Done";
         }
 
-        // component variable is used to determine Component name in angular app
+        /// <summary>
+        /// component variable is used to determine Component name in angular/react app
+        /// </summary>
         public async Task SendEmail(string email, string token, string component, string subject,string message)
         {
             var result = new EmailDTO
@@ -110,9 +112,33 @@ namespace Ecom.Infrastructure.Implementation.Repositories
                 return "Invalid Email or Password";
             }
 
-            //Generate Token
+            var accessToken = _tokenService.GenerateAccessToken(user);
 
-            return "Done";  // return JWT Token
+            return accessToken;  // return JWT Token
         }
+
+        public async Task<bool> SendEmailForForgetPassword(string email)
+        {
+
+            if (string.IsNullOrEmpty(email))
+            {
+                return false;
+            }
+
+            var user = await _userManager.FindByEmailAsync(email);
+            
+            if (user is null)
+            {
+                return false;
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            
+            await SendEmail(user.Email, token, "Reset-Password", "Reset Password", "Please click the button below to reset your password");
+
+            return true;
+        }
+
+       
     }
 }

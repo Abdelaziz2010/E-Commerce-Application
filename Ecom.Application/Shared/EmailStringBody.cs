@@ -5,7 +5,7 @@ namespace Ecom.Application.Shared
     public class EmailStringBody
     {
         /// <summary>
-        /// component variable is used to determine Component name in angular app
+        /// component variable is used to determine Component name in angular/react app
         /// </summary>
        
         //for example if the component name is Active then the link will be: http://localhost:4200/Account/Active?email={email}&code={encodeToken}
@@ -17,7 +17,7 @@ namespace Ecom.Application.Shared
                      <html> 
 
                        <head>
-
+                            
                          <style>
                             .button
                             {{
