@@ -56,5 +56,16 @@ namespace Ecom.Presentation.Controllers
 
             return Ok(new ResponseAPI(200));
         }
+
+        [HttpPost("Activate-Account")]
+        public async Task<IActionResult> ActivateAccount(ActiveAccountDTO accountDTO)
+        {
+
+            var result = await work.AuthRepository.ActivateAccount(accountDTO);
+
+            return result ? Ok(new ResponseAPI(200)) : BadRequest(new ResponseAPI(200));
+        }
+
+       
     }
 }
