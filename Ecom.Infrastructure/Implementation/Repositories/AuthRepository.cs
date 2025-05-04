@@ -74,7 +74,6 @@ namespace Ecom.Infrastructure.Implementation.Repositories
 
             await _emailService.SendEmail(result);
         }
-    
 
         public async Task<string> LoginAsync(LoginDTO loginDTO)
         {
