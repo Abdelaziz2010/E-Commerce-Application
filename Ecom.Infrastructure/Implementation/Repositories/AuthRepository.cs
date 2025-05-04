@@ -139,6 +139,28 @@ namespace Ecom.Infrastructure.Implementation.Repositories
             return true;
         }
 
-       
+        public async Task<string> ResetPassword(ResetPasswordDTO resetPasswordDTO)
+        {
+            if(resetPasswordDTO is null)
+            {
+                return "Invalid Data";
+            }
+
+            var user = await _userManager.FindByEmailAsync(resetPasswordDTO.Email);
+
+            if(user is null)
+            {
+                return "This Email not exists";
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, resetPasswordDTO.Token, resetPasswordDTO.Password);
+
+            if (result.Succeeded is not true)
+            {
+                return result.Errors.ToList()[0].Description;
+            }
+
+            return "Password Changed Successfully";
+        }
     }
 }
