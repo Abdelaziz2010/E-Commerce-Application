@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ecom.Application.DTOs.Auth
 {
-    public class ResetPasswordDTO
+    public record ResetPasswordDTO
     {
         public string Email { get; set; }
         public string Password { get; set; }

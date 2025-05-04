@@ -162,5 +162,34 @@ namespace Ecom.Infrastructure.Implementation.Repositories
 
             return "Password Changed Successfully";
         }
+
+        public async Task<bool> ActivateAccount(ActiveAccountDTO activeAccountDTO)
+        {
+            
+            if (activeAccountDTO is null)
+            {
+                return false;
+            }
+            
+            var user = await _userManager.FindByEmailAsync(activeAccountDTO.Email);
+            
+            if (user is null)
+            {
+                return false;
+            }
+
+            var result = await _userManager.ConfirmEmailAsync(user, activeAccountDTO.Token);
+           
+            if (result.Succeeded)
+            {
+                return true;
+            }
+
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            
+            await SendEmail(user.Email, token, "Active", "Active Email", "Please click the button below to activate your account");
+            
+            return false;
+        }
     }
 }
