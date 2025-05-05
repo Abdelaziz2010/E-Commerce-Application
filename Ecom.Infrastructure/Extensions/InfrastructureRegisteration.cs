@@ -1,7 +1,9 @@
 ﻿using Ecom.Application.Interfaces.Repositories;
+using Ecom.Application.Services.Interfaces;
 using Ecom.Domain.Entities;
 using Ecom.Infrastructure.Data;
 using Ecom.Infrastructure.Implementation.Repositories;
+using Ecom.Infrastructure.Implementation.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
@@ -19,7 +21,7 @@ namespace Ecom.Infrastructure.Extensions
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services,IConfiguration configuration)
         {
-            //apply DbContext
+            //register DbContext
             services.AddDbContext<AppDbContext>(option =>
             {
                 option.UseSqlServer(configuration.GetConnectionString("EcomDatabase"));
@@ -32,12 +34,12 @@ namespace Ecom.Infrastructure.Extensions
                 return ConnectionMultiplexer.Connect(config);
             });
 
-            //apply UnitOfWork 
+            // register UnitOfWork 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
-            // apply Identity
+            // register Identity service
             services.AddIdentity<AppUser, IdentityRole> ().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
             // apply Authentication 
