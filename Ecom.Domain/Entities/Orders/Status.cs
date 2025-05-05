@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Ecom.Domain.Entities.Orders
 {
+    // The Status enum represents the status of payment.
     public enum Status
     {
-
+        Pending,
+        PaymentReceived,
+        PaymentFailed
     }
 }

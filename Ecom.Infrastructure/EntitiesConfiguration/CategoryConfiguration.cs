@@ -19,7 +19,6 @@ namespace Ecom.Infrastructure.EntitiesConfiguration
                 new Category { Id = 1, Name = "test", Description = "test" },
                 new Category { Id = 2, Name = "test2", Description = "test2" },
                 new Category { Id = 3, Name = "test3", Description = "test3" });
-
         }
     }
 }
