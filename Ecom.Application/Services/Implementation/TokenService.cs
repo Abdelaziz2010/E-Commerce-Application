@@ -7,12 +7,18 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Permissions;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using System.Globalization;
 namespace Ecom.Application.Services.Implementation
 {
-    // Here you would implement the logic to generate a JWT token for the user
+    // Here you would implement the logic to generate a JWT token and Refresh token for the user
     public class TokenService : ITokenService
     {
         private readonly IConfiguration _configuration;
+        private readonly UserManager<AppUser> _userManager;
+
+
         public TokenService(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -24,7 +30,9 @@ namespace Ecom.Application.Services.Implementation
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Email, user.Email)
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
             var secretKey = _configuration["JWTSettings:SecretKey"];
@@ -51,6 +59,16 @@ namespace Ecom.Application.Services.Implementation
             string tokenString = tokenHandler.WriteToken(token);
            
             return tokenString;
+        }
+
+        public RefreshToken GenerateRefreshToken(string userId)
+        {
+            return new RefreshToken
+            {
+                Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
+                ExpiredAt = DateTime.UtcNow.AddDays(10),
+                UserId = userId
+            };
         }
     }
 }

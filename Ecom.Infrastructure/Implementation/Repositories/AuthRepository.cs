@@ -63,7 +63,7 @@ namespace Ecom.Infrastructure.Implementation.Repositories
 
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-            await SendEmail(user.Email, token, "Activate", "Activate Email", "Please click the button below to activate your account");
+            await SendEmail(user.Email, token, "Activate", "Activate Email", "Please click the button to activate your account");
 
             return "Done";
         }
@@ -102,7 +102,7 @@ namespace Ecom.Infrastructure.Implementation.Repositories
             {
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                
-                await SendEmail(user.Email, token, "Activate", "Activate Email", "Please click the button below to activate your account");
+                await SendEmail(user.Email, token, "Activate", "Activate Email", "Please click the button to activate your account");
 
                 return "Please check your email to activate your account, We have sent an activation link to your E-mail !!!";
             }
@@ -134,7 +134,7 @@ namespace Ecom.Infrastructure.Implementation.Repositories
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
             
-            await SendEmail(user.Email, token, "Reset-Password", "Reset Password", "Please click the button below to reset your password");
+            await SendEmail(user.Email, token, "Reset-Password", "Reset Password", "Please click the button to reset your password");
 
             return true;
         }
@@ -163,7 +163,7 @@ namespace Ecom.Infrastructure.Implementation.Repositories
             return "Password Changed Successfully";
         }
 
-        public async Task<bool> ActivateAccount(ActivateAccountDTO activateAccountDTO)  // Confirm Email
+        public async Task<bool> ActivateAccount(ActivateAccountDTO activateAccountDTO)  // ConfirmEmail
         {
             
             if (activateAccountDTO is null)
@@ -188,7 +188,7 @@ namespace Ecom.Infrastructure.Implementation.Repositories
 
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             
-            await SendEmail(user.Email, token, "Activate", "Activate Email", "Please click the button below to activate your account");
+            await SendEmail(user.Email, token, "Activate", "Activate Email", "Please click the button to activate your account");
             
             return false;
         }

@@ -5,5 +5,6 @@ namespace Ecom.Domain.Entities
     {
         public string DisplayName { get; set; }
         public Address Address { get; set; }
+        public List<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     }
 }

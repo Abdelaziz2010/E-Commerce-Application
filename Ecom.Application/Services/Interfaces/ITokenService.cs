@@ -10,5 +10,6 @@ namespace Ecom.Application.Services.Interfaces
     public interface ITokenService
     {
         string GenerateAccessToken(AppUser user);
+        RefreshToken GenerateRefreshToken(string userId);
     }
 }
