@@ -4,21 +4,14 @@ using Microsoft.Extensions.Configuration;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Permissions;
 using System.Security.Cryptography;
 using System.Text;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using System.Globalization;
 namespace Ecom.Application.Services.Implementation
 {
     // Here you would implement the logic to generate a JWT token and Refresh token for the user
     public class TokenService : ITokenService
     {
         private readonly IConfiguration _configuration;
-        private readonly UserManager<AppUser> _userManager;
-
-
         public TokenService(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -48,7 +41,7 @@ namespace Ecom.Application.Services.Implementation
                 Issuer = _configuration["JWTSettings:Issuer"],
                 Audience = _configuration["JWTSettings:Audience"],
                 SigningCredentials = signingCreds,
-                Expires = DateTime.UtcNow.AddMinutes(30),  // short lived token
+                Expires = DateTime.UtcNow.AddDays(1),
                 NotBefore = DateTime.UtcNow,
             };
 
