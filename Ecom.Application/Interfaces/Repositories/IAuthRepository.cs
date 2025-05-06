@@ -1,6 +1,5 @@
-﻿
-
-using Ecom.Application.DTOs.Auth;
+﻿using Ecom.Application.DTOs.Auth;
+using Ecom.Domain.Entities;
 
 namespace Ecom.Application.Interfaces.Repositories
 {
@@ -11,5 +10,6 @@ namespace Ecom.Application.Interfaces.Repositories
         Task<bool> SendForgotPasswordEmail(string email);
         Task<bool> ActivateAccount(ActivateAccountDTO activateAccountDTO);
         Task<string> ResetPassword(ResetPasswordDTO resetPasswordDTO);
+        Task<bool> UpdateOrCreateAddress(string email, Address address); 
     }
 }

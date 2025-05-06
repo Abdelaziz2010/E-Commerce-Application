@@ -5,7 +5,9 @@ using Ecom.Application.Interfaces.Repositories;
 using Ecom.Application.Services.Interfaces;
 using Ecom.Application.Shared;
 using Ecom.Domain.Entities;
+using Ecom.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 namespace Ecom.Infrastructure.Implementation.Repositories
 {
     public class AuthRepository : IAuthRepository
@@ -14,17 +16,20 @@ namespace Ecom.Infrastructure.Implementation.Repositories
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IEmailService _emailService;
         private readonly ITokenService _tokenService;
+        private readonly AppDbContext _context;
 
         public AuthRepository(
             UserManager<AppUser> userManager, 
             SignInManager<AppUser> signInManager,
             IEmailService emailService, 
-            ITokenService tokenService)
+            ITokenService tokenService,
+            AppDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailService = emailService;
             _tokenService = tokenService;
+            _context = context;
         }
 
         public async Task<string> RegisterAsync(RegisterDTO registerDTO)
@@ -155,12 +160,12 @@ namespace Ecom.Infrastructure.Implementation.Repositories
 
             var result = await _userManager.ResetPasswordAsync(user, resetPasswordDTO.Token, resetPasswordDTO.Password);
 
-            if (result.Succeeded is not true)
+            if (result.Succeeded)
             {
-                return result.Errors.ToList()[0].Description;
+                return "Done";
             }
 
-            return "Password Changed Successfully";
+            return result.Errors.ToList()[0].Description;
         }
 
         public async Task<bool> ActivateAccount(ActivateAccountDTO activateAccountDTO)  // ConfirmEmail
@@ -191,6 +196,43 @@ namespace Ecom.Infrastructure.Implementation.Repositories
             await SendEmail(user.Email, token, "Activate", "Activate Email", "Please click the button to activate your account");
             
             return false;
+        }
+
+        public async Task<bool> UpdateOrCreateAddress(string email, Address address)
+        {
+            if (string.IsNullOrEmpty(email) || address is null)
+            {
+                return false;
+            }
+
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user is null)
+            {
+                return false;
+            }
+
+            var existingAddress = await _context.Addresses.FirstOrDefaultAsync(a => a.AppUserId == user.Id);
+
+            if (existingAddress is null)
+            {
+                address.AppUserId = user.Id;   // Set the AppUserId for the new address                   
+                await _context.Addresses.AddAsync(address);
+            }
+            else
+            {
+                // Detach the existing tracked instance
+                _context.Entry(existingAddress).State = EntityState.Detached;
+
+                // Update the existing address
+                address.Id = existingAddress.Id;                
+                address.AppUserId = existingAddress.AppUserId;  
+                _context.Addresses.Update(address);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return true;
         }
     }
 }

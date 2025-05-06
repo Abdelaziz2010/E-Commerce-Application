@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using Ecom.Application.DTOs.Auth;
+using Ecom.Application.DTOs.Order;
 using Ecom.Application.Interfaces.Repositories;
+using Ecom.Domain.Entities;
 using Ecom.Presentation.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Ecom.Presentation.Controllers
 {
@@ -73,6 +76,41 @@ namespace Ecom.Presentation.Controllers
 
             var result = await work.AuthRepository.SendForgotPasswordEmail(email);
 
+            return result ? Ok(new ResponseAPI(200)) : BadRequest(new ResponseAPI(400));
+        }
+
+        [HttpPost("Reset-Password")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDTO resetPasswordDTO)
+        {
+            var result = await work.AuthRepository.ResetPassword(resetPasswordDTO);
+            
+            if (result == "Done")
+            {
+                return Ok(new ResponseAPI(200));
+            }
+
+            return BadRequest(new ResponseAPI(400, result));
+        }
+
+        [HttpPost("Update-Or-Create-Address")]
+        public async Task<IActionResult> UpdateOrCreateAddress(ShippingAddressDTO shippingAddressDTO)
+        {
+            if (shippingAddressDTO is null)
+            {
+                return BadRequest(new ResponseAPI(400));
+            }
+
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+            
+            if (string.IsNullOrEmpty(email))
+            {
+                return BadRequest(new ResponseAPI(400));
+            }
+
+            var address = mapper.Map<Address>(shippingAddressDTO);
+
+            var result = await work.AuthRepository.UpdateOrCreateAddress(email, address);
+            
             return result ? Ok(new ResponseAPI(200)) : BadRequest(new ResponseAPI(400));
         }
     }

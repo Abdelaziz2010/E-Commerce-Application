@@ -96,7 +96,7 @@ namespace Ecom.Infrastructure.Implementation.Repositories
             {
                 if (_authRepository == null)
                 {
-                    _authRepository = new AuthRepository(_userManager,_signInManager,_emailService,_tokenService);
+                    _authRepository = new AuthRepository(_userManager, _signInManager, _emailService, _tokenService, _context);
                 }
                 return _authRepository;
             }
