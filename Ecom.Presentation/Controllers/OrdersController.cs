@@ -28,7 +28,6 @@ namespace Ecom.Presentation.Controllers
             }
 
             var buyerEmail = User.FindFirst(ClaimTypes.Email)?.Value;
-            //var buyerEmail = "islam@gmail.com"; // For testing purposes, hardcoded email
 
             if (string.IsNullOrEmpty(buyerEmail))
             {
@@ -38,6 +37,59 @@ namespace Ecom.Presentation.Controllers
             var order = await _orderService.CreateOrderAsync(orderDTO, buyerEmail);
 
             return Ok(order);
+        }
+
+        [HttpGet("Get-All-Orders-For-User")]
+        public async Task<IActionResult> GetAllOrdersForUser()
+        {
+            var buyerEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+
+            if (string.IsNullOrEmpty(buyerEmail))
+            {
+                return Unauthorized(new ResponseAPI(401));
+            }
+
+            var orders = await _orderService.GetAllOrdersForUserAsync(buyerEmail);
+         
+            if (orders == null || orders.Count == 0)
+            {
+                return NotFound(new ResponseAPI(404, "No orders found for this user"));
+            }
+            
+            return Ok(orders);
+        }
+
+        [HttpGet("Get-Order-By-Id/{id}")]
+        public async Task<IActionResult> GetOrderById(int id) 
+        {
+            var buyerEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            
+            if (string.IsNullOrEmpty(buyerEmail))
+            {
+                return Unauthorized(new ResponseAPI(401));
+            }
+            
+            var order = await _orderService.GetOrderByIdAsync(id, buyerEmail);
+            
+            if (order == null)
+            {
+                return NotFound(new ResponseAPI(404, "Order not found"));
+            }
+            
+            return Ok(order);
+        }
+
+        [HttpGet("Get-Delivery-Methods")]
+        public async Task<IActionResult> GetDeliveryMethods()
+        {
+            var deliveryMethods = await _orderService.GetDeliveryMethodsAsync();
+
+            if (deliveryMethods == null || deliveryMethods.Count == 0)
+            {
+                return NotFound(new ResponseAPI(404, "No delivery methods found"));
+            }
+
+            return Ok(deliveryMethods);
         }
     }
 }
