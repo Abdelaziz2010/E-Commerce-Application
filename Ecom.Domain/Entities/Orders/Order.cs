@@ -21,8 +21,8 @@ namespace Ecom.Domain.Entities.Orders
         public DeliveryMethod DeliveryMethod { get; set; } 
         public IReadOnlyList<OrderItem> OrderItems { get; set;}
         public Status Status { get; set; } = Status.Pending;   // Default status is Pending
-
         public decimal Total => SubTotal + DeliveryMethod.Price;
+       
         //public decimal GetTotal()            
         //{
         //    return SubTotal + DeliveryMethod.Price;

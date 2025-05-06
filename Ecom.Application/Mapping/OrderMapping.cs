@@ -7,7 +7,9 @@ namespace Ecom.Application.Mapping
     {
         public OrderMapping() 
         {
-            CreateMap<Order, OrderToReturnDTO>().ReverseMap();
+            CreateMap<Order, OrderToReturnDTO>()
+                .ForMember(dest => dest.DeliveryMethod, op => op.MapFrom(src => src.DeliveryMethod.Name)).ReverseMap();
+
             CreateMap<OrderItem, OrderItemDTO>().ReverseMap();
             CreateMap<ShippingAddress, ShippingAddressDTO>().ReverseMap();
         }
