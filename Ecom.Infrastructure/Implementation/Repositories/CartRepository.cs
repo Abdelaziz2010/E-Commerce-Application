@@ -29,7 +29,7 @@ namespace Ecom.Infrastructure.Implementation.Repositories
         public async Task<Cart> UpdateOrCreateCartAsync(Cart cart) 
         {
 
-            var _cart = await _database.StringSetAsync(cart.Id, JsonSerializer.Serialize(cart), TimeSpan.FromDays(3));
+            var _cart = await _database.StringSetAsync(cart.Id, JsonSerializer.Serialize(cart), TimeSpan.FromDays(20));
 
             if(_cart)
             {
