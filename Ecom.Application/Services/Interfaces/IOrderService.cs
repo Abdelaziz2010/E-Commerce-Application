@@ -5,8 +5,8 @@ namespace Ecom.Application.Services.Interfaces
     public interface IOrderService
     {
         Task<Order> CreateOrderAsync(OrderDTO order, string buyerEmail);
-        Task<IReadOnlyList<Order>> GetAllOrdersForUserAsync(string buyerEmail); 
-        Task<Order> GetOrderByIdAsync(int id, string buyerEmail);
+        Task<IReadOnlyList<OrderToReturnDTO>> GetAllOrdersForUserAsync(string buyerEmail); 
+        Task<OrderToReturnDTO> GetOrderByIdAsync(int id, string buyerEmail);
         Task<IReadOnlyList<DeliveryMethod>> GetDeliveryMethodsAsync();
     }
 }

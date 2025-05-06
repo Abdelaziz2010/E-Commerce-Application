@@ -61,7 +61,7 @@ namespace Ecom.Infrastructure.Implementation.Services
             return order;
         }
 
-        public async Task<IReadOnlyList<Order>> GetAllOrdersForUserAsync(string buyerEmail)
+        public async Task<IReadOnlyList<OrderToReturnDTO>> GetAllOrdersForUserAsync(string buyerEmail)
         {
             var orders = await _context.Orders
                 .Where(x => x.BuyerEmail == buyerEmail)
@@ -70,10 +70,12 @@ namespace Ecom.Infrastructure.Implementation.Services
                 .AsNoTracking()
                 .ToListAsync();
 
-            return orders;
+            var result = _mapper.Map<IReadOnlyList<OrderToReturnDTO>>(orders);
+            
+            return result;
         }
 
-        public async Task<Order> GetOrderByIdAsync(int id, string buyerEmail)
+        public async Task<OrderToReturnDTO> GetOrderByIdAsync(int id, string buyerEmail)
         {
             var order = await _context.Orders
                 .Where(x => x.BuyerEmail == buyerEmail && x.Id == id)
@@ -82,7 +84,9 @@ namespace Ecom.Infrastructure.Implementation.Services
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
 
-            return order;
+            var result = _mapper.Map<OrderToReturnDTO>(order);
+
+            return result;
         }
 
         public async Task<IReadOnlyList<DeliveryMethod>> GetDeliveryMethodsAsync()
