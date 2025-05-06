@@ -61,17 +61,33 @@ namespace Ecom.Infrastructure.Implementation.Services
             return order;
         }
 
-        public Task<IReadOnlyList<Order>> GetAllOrdersForUserAsync(string buyerEmail)
+        public async Task<IReadOnlyList<Order>> GetAllOrdersForUserAsync(string buyerEmail)
         {
-            throw new NotImplementedException();
+            var orders = await _context.Orders
+                .Where(x => x.BuyerEmail == buyerEmail)
+                .Include(x => x.DeliveryMethod)
+                .Include(x => x.OrderItems)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return orders;
         }
-        public Task<Order> GetOrderByIdAsync(int id, string buyerEmail)
+
+        public async Task<Order> GetOrderByIdAsync(int id, string buyerEmail)
         {
-            throw new NotImplementedException();
+            var order = await _context.Orders
+                .Where(x => x.BuyerEmail == buyerEmail && x.Id == id)
+                .Include(x => x.DeliveryMethod)
+                .Include(x => x.OrderItems)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+
+            return order;
         }
-        public Task<IReadOnlyList<DeliveryMethod>> GetDeliveryMethodAsync()
+
+        public async Task<IReadOnlyList<DeliveryMethod>> GetDeliveryMethodsAsync()
         {
-            throw new NotImplementedException();
+            return await _context.DeliveryMethods.AsNoTracking().ToListAsync();
         }
     }
 }

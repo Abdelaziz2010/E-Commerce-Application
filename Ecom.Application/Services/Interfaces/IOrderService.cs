@@ -7,6 +7,6 @@ namespace Ecom.Application.Services.Interfaces
         Task<Order> CreateOrderAsync(OrderDTO order, string buyerEmail);
         Task<IReadOnlyList<Order>> GetAllOrdersForUserAsync(string buyerEmail); 
         Task<Order> GetOrderByIdAsync(int id, string buyerEmail);
-        Task<IReadOnlyList<DeliveryMethod>> GetDeliveryMethodAsync();
+        Task<IReadOnlyList<DeliveryMethod>> GetDeliveryMethodsAsync();
     }
 }
