@@ -89,9 +89,14 @@ namespace Ecom.Infrastructure.Implementation.Services
             return result;
         }
 
-        public async Task<IReadOnlyList<DeliveryMethod>> GetDeliveryMethodsAsync()
+        public async Task<IReadOnlyList<DeliveryMethodDTO>> GetDeliveryMethodsAsync()
         {
-            return await _context.DeliveryMethods.AsNoTracking().ToListAsync();
+
+            var deliveryMethods = await _context.DeliveryMethods.AsNoTracking().ToListAsync();
+            
+            var result = _mapper.Map<IReadOnlyList<DeliveryMethodDTO>>(deliveryMethods);
+
+            return result;
         }
     }
 }

@@ -11,6 +11,7 @@ namespace Ecom.Application.Mapping
                 .ForMember(dest => dest.DeliveryMethod, op => op.MapFrom(src => src.DeliveryMethod.Name)).ReverseMap();
 
             CreateMap<OrderItem, OrderItemDTO>().ReverseMap();
+
             CreateMap<ShippingAddress, ShippingAddressDTO>().ReverseMap();
         }
     }
