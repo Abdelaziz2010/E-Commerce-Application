@@ -92,6 +92,28 @@ namespace Ecom.Presentation.Controllers
             return BadRequest(new ResponseAPI(400, result));
         }
 
+        [HttpGet("Get-User-Address")]
+        public async Task<IActionResult> GetUserAddress()
+        {
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+
+            if (string.IsNullOrEmpty(email))
+            {
+                return BadRequest(new ResponseAPI(400));
+            }
+            
+            var address = await work.AuthRepository.GetUserAddress(email);
+            
+            if (address is null)
+            {
+                return NotFound(new ResponseAPI(404));
+            }
+
+            var addressDTO = mapper.Map<ShippingAddressDTO>(address);
+
+            return Ok(addressDTO);
+        }
+
         [HttpPut("Update-Or-Create-Address")]
         public async Task<IActionResult> UpdateOrCreateAddress(ShippingAddressDTO shippingAddressDTO)
         {

@@ -198,6 +198,15 @@ namespace Ecom.Infrastructure.Implementation.Repositories
             return false;
         }
 
+        public async Task<Address> GetUserAddress(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            var address = await _context.Addresses.FirstOrDefaultAsync(a => a.AppUserId == user.Id);
+
+            return address;
+        }
+        
         public async Task<bool> UpdateOrCreateAddress(string email, Address address)
         {
             if (string.IsNullOrEmpty(email) || address is null)
