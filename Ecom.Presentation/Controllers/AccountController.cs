@@ -92,7 +92,7 @@ namespace Ecom.Presentation.Controllers
             return BadRequest(new ResponseAPI(400, result));
         }
 
-        [HttpPost("Update-Or-Create-Address")]
+        [HttpPut("Update-Or-Create-Address")]
         public async Task<IActionResult> UpdateOrCreateAddress(ShippingAddressDTO shippingAddressDTO)
         {
             if (shippingAddressDTO is null)
