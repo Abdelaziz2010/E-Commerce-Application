@@ -139,14 +139,8 @@ namespace Ecom.Presentation.Controllers
         [HttpGet("Is-User-Authenticated")]
         public async Task<IActionResult> IsUserAuthenticated()
         {
-            var isAuthenticated =  User.Identity.IsAuthenticated;    // Check if the user is authenticated
-
-            if (isAuthenticated)
-            {
-                return Ok(new ResponseAPI(200));
-            }
-            
-            return Unauthorized(new ResponseAPI(401));
+            // Check if the user is authenticated.
+            return User.Identity.IsAuthenticated ? Ok(new ResponseAPI(200)) : Unauthorized(new ResponseAPI(401));
         }
     }
 }
