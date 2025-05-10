@@ -2,6 +2,7 @@
 using Ecom.Application.Interfaces.Repositories;
 using Ecom.Application.Services.Interfaces;
 using Ecom.Domain.Entities;
+using Ecom.Domain.Entities.Orders;
 using Ecom.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -77,6 +78,41 @@ namespace Ecom.Infrastructure.Implementation.Services
             await _work.CartRepository.UpdateOrCreateCartAsync(cart);
 
             return cart;
+        }
+
+        public async Task<Order> UpdateOrderStatusToSuccess(string paymentIntentId)
+        {
+            var order = await _context.Orders.FirstOrDefaultAsync(x => x.PaymentIntentId == paymentIntentId);
+
+            if (order == null)
+            {
+                return null;
+            }
+
+            order.Status = Status.PaymentReceived;
+           
+            _context.Orders.Update(order);
+            
+            await _context.SaveChangesAsync();
+            
+            return order;
+        }
+
+        public async Task<Order> UpdateOrderStatusToFailed(string paymentIntentId)
+        {
+            var order = await _context.Orders.FirstOrDefaultAsync(x => x.PaymentIntentId == paymentIntentId);
+            if (order == null)
+            {
+                return null;
+            }
+
+            order.Status = Status.PaymentFailed;
+
+            _context.Orders.Update(order);
+            
+            await _context.SaveChangesAsync();
+
+            return order;
         }
     }
 }
