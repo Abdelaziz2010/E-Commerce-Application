@@ -68,7 +68,7 @@ namespace Ecom.Infrastructure.Implementation.Repositories
 
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-            await SendEmail(user.Email, token, "Activate", "Activate Email", "Please click the button to activate your account");
+            await SendEmail(user.Email, token, "Activate", "Activate Your Email", "Please click the button to activate your email");
 
             return "Done";
         }
@@ -107,7 +107,7 @@ namespace Ecom.Infrastructure.Implementation.Repositories
             {
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                
-                await SendEmail(user.Email, token, "Activate", "Activate Email", "Please click the button to activate your account");
+                await SendEmail(user.Email, token, "Activate", "Activate Your Email", "Please click the button to activate your email");
 
                 return "Please check your email to activate your account, We have sent an activation link to your E-mail !!!";
             }
