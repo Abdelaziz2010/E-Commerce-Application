@@ -4,9 +4,7 @@ using Ecom.Application.DTOs.Order;
 using Ecom.Application.Interfaces.Repositories;
 using Ecom.Domain.Entities;
 using Ecom.Presentation.Helpers;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -56,33 +54,10 @@ namespace Ecom.Presentation.Controllers
                 Secure = true,
                 IsEssential = true,
                 Domain = "localhost",
-                Expires = DateTime.UtcNow.AddDays(1)
+                Expires = DateTime.UtcNow.AddMinutes(30)
             });
 
             return Ok(new ResponseAPI(200));
-        }
-
-        [HttpGet("Logout")]
-        public IActionResult Logout()
-        {
-            try
-            {
-                Response.Cookies.Append("AccessToken", "", new CookieOptions
-                {
-                    HttpOnly = true,
-                    SameSite = SameSiteMode.Strict, // Use Strict for better security
-                    Secure = true,
-                    IsEssential = true,
-                    Domain = "localhost",
-                    Expires = DateTime.UtcNow.AddDays(-1)   // Expire the cookie
-                });
-
-                return Ok(new ResponseAPI(200, "Logged out successfully"));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ResponseAPI(400));
-            }
         }
 
         [HttpPost("Activate-Account")]
@@ -117,7 +92,6 @@ namespace Ecom.Presentation.Controllers
             return BadRequest(new ResponseAPI(400, result));
         }
 
-        [Authorize]
         [HttpGet("Get-User-Address")]
         public async Task<IActionResult> GetUserAddress()
         {
@@ -140,7 +114,6 @@ namespace Ecom.Presentation.Controllers
             return Ok(addressDTO);
         }
 
-        [Authorize]
         [HttpPut("Update-Or-Create-Address")]
         public async Task<IActionResult> UpdateOrCreateAddress(ShippingAddressDTO shippingAddressDTO)
         {
