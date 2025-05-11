@@ -4,7 +4,9 @@ using Ecom.Application.DTOs.Order;
 using Ecom.Application.Interfaces.Repositories;
 using Ecom.Domain.Entities;
 using Ecom.Presentation.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -12,9 +14,10 @@ namespace Ecom.Presentation.Controllers
 {
     public class AccountController : BaseController
     {
-        public AccountController(IUnitOfWork work, IMapper mapper) : base(work, mapper)
+        private readonly UserManager<AppUser> _userManager;
+        public AccountController(IUnitOfWork work, IMapper mapper, UserManager<AppUser> userManager) : base(work, mapper)
         {
-
+            _userManager = userManager;
         }
 
         [HttpPost("Register")]
@@ -58,6 +61,64 @@ namespace Ecom.Presentation.Controllers
             });
 
             return Ok(new ResponseAPI(200));
+        }
+
+        [HttpGet("Logout")]
+        public IActionResult Logout()
+        {
+            try
+            {
+                Response.Cookies.Append("AccessToken", "", new CookieOptions
+                {
+                    HttpOnly = true,
+                    SameSite = SameSiteMode.Strict, // Use Strict for better security
+                    Secure = true,
+                    IsEssential = true,
+                    Domain = "localhost",
+                    Expires = DateTime.UtcNow.AddDays(-1)   // Expire the cookie
+                });
+
+                return Ok(new ResponseAPI(200, "Logged out successfully"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseAPI(400));
+            }
+        }
+
+        [HttpGet("Get-User-Info")]
+        public async Task<IActionResult> GetUserInfo()
+        {
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+            
+            if (string.IsNullOrEmpty(email))
+            {
+                return BadRequest(new ResponseAPI(400));
+            }
+
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user is null)
+            {
+                return NotFound(new ResponseAPI(404));
+            }
+            
+            var userDTO = mapper.Map<UserDTO>(user);
+
+            return Ok(userDTO);
+        }
+
+        [HttpGet("Get-User-Name")]
+        public IActionResult GetUserName()
+        {
+            var name = User.Identity?.Name;
+
+            if (string.IsNullOrEmpty(name))
+            {
+                return BadRequest(new ResponseAPI(400));
+            }
+
+            return Ok(name);
         }
 
         [HttpPost("Activate-Account")]
@@ -137,7 +198,7 @@ namespace Ecom.Presentation.Controllers
         }
 
         [HttpGet("Is-User-Authenticated")]
-        public async Task<IActionResult> IsUserAuthenticated()
+        public IActionResult IsUserAuthenticated()
         {
             // Check if the user is authenticated.
             return User.Identity.IsAuthenticated ? Ok(new ResponseAPI(200)) : Unauthorized(new ResponseAPI(401));
