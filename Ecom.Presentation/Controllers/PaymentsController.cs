@@ -15,9 +15,14 @@ namespace Ecom.Presentation.Controllers
     public class PaymentsController : ControllerBase
     {
         private readonly IPaymentService _paymentService;
-        public PaymentsController(IPaymentService paymentService)
+        private readonly ILogger _logger;
+        private readonly IConfiguration _configuration;
+
+        public PaymentsController(IPaymentService paymentService, ILogger logger, IConfiguration configuration)
         {
             _paymentService = paymentService;
+            _logger = logger;
+            _configuration = configuration;
         }
 
         [HttpPost("Create-Or-Update-Payment")]
@@ -26,12 +31,18 @@ namespace Ecom.Presentation.Controllers
             return await _paymentService.CreateOrUpdatePaymentAsync(cartId, deliveryMethodId);
         }
 
-        const string endpointSecret = "whsec_28cc3dec50be3eaba23c0d5217e31f075148d84948bb1e7aa84452952a3a9461";
+        /// <summary>
+        /// Why Webhooks?
+        /// No manual polling: The app doesn’t have to constantly ask Stripe "Did the payment go through?".
+        /// Real-time updates: Immediate order status updates for better user experience and backend accuracy.
+        /// </summary> 
 
-        [HttpPost("WebHook")]
+        [HttpPost("WebHook")]       // https://Ecom.com/api/Payments/WebHook
         public async Task<IActionResult> UpdateOrderStatusWithStripe()
         {
             var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+
+            var endpointSecret = _configuration["StripeSettings:WebhookSecret"];
 
             try
             {
@@ -42,27 +53,31 @@ namespace Ecom.Presentation.Controllers
 
                 Order order;
 
-                // Handle the event
-                if(stripeEvent.Type == Events.PaymentIntentSucceeded)
+                switch(stripeEvent.Type)      // Handle the event
                 {
-                    paymentIntent = stripeEvent.Data.Object as PaymentIntent;
-                    order = await _paymentService.UpdateOrderStatusToSuccess(paymentIntent.Id);
-                }
-                else if(stripeEvent.Type == Events.PaymentIntentPaymentFailed)
-                {
-                    paymentIntent = stripeEvent.Data.Object as PaymentIntent;
-                    order = await _paymentService.UpdateOrderStatusToFailed(paymentIntent.Id);
-                }
-                // ... handle other event types
-                else
-                {
-                    Console.WriteLine("Unhandled event type: {0}", stripeEvent.Type);
+                    case EventTypes.PaymentIntentSucceeded:
+                        paymentIntent = stripeEvent.Data.Object as PaymentIntent;
+                        order = await _paymentService.UpdateOrderStatusToSuccess(paymentIntent.Id);
+                        break;
+                    case EventTypes.PaymentIntentPaymentFailed:
+                        paymentIntent = stripeEvent.Data.Object as PaymentIntent;
+                        order = await _paymentService.UpdateOrderStatusToFailed(paymentIntent.Id);
+                        break;
+                    default:   
+                        _logger.LogInformation("Unhandled event type: {EventType}", stripeEvent.Type);
+                        break;
                 }
 
                 return Ok();
             }
+            catch (StripeException ex)
+            {
+                _logger.LogError(ex, $"Stripe webhook error: {ex.Message}");
+                return BadRequest(new ResponseAPI(400, $"Stripe webhook error: {ex.Message}"));
+            }
             catch (Exception ex)
             {
+                _logger.LogError(ex, $"Webhook error: {ex.Message}");
                 return BadRequest(new ResponseAPI(400, ex.Message));
             }
         }
