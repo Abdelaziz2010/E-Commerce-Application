@@ -243,5 +243,17 @@ namespace Ecom.Infrastructure.Implementation.Repositories
 
             return true;
         }
+
+        public async Task<AppUser> GetUserInfo(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            
+            if (user is null)
+            {
+                return null;
+            }
+
+            return user;
+        }
     }
 }

@@ -11,6 +11,7 @@ namespace Ecom.Application.Interfaces.Repositories
         Task<bool> ActivateAccount(ActivateAccountDTO activateAccountDTO);
         Task<string> ResetPassword(ResetPasswordDTO resetPasswordDTO);
         Task<Address> GetUserAddress(string email);
-        Task<bool> UpdateOrCreateAddress(string email, Address address); 
+        Task<bool> UpdateOrCreateAddress(string email, Address address);
+        Task<AppUser> GetUserInfo(string email);
     }
 }

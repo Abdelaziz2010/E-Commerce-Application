@@ -14,10 +14,9 @@ namespace Ecom.Presentation.Controllers
 {
     public class AccountController : BaseController
     {
-        private readonly UserManager<AppUser> _userManager;
-        public AccountController(IUnitOfWork work, IMapper mapper, UserManager<AppUser> userManager) : base(work, mapper)
+        public AccountController(IUnitOfWork work, IMapper mapper) : base(work, mapper)
         {
-            _userManager = userManager;
+
         }
 
         [HttpPost("Register")]
@@ -96,7 +95,7 @@ namespace Ecom.Presentation.Controllers
                 return BadRequest(new ResponseAPI(400));
             }
 
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await work.AuthRepository.GetUserInfo(email);
 
             if (user is null)
             {
