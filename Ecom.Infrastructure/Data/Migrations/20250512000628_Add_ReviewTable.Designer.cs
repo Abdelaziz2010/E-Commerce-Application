@@ -4,6 +4,7 @@ using Ecom.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ecom.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250512000628_Add_ReviewTable")]
+    partial class Add_ReviewTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -369,9 +372,6 @@ namespace Ecom.Infrastructure.Data.Migrations
                     b.Property<decimal>("OldPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<double>("Rating")
-                        .HasColumnType("float");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
@@ -386,8 +386,7 @@ namespace Ecom.Infrastructure.Data.Migrations
                             Description = "test",
                             Name = "test",
                             NewPrice = 10.00m,
-                            OldPrice = 0m,
-                            Rating = 0.0
+                            OldPrice = 0m
                         },
                         new
                         {
@@ -396,8 +395,7 @@ namespace Ecom.Infrastructure.Data.Migrations
                             Description = "test2",
                             Name = "test2",
                             NewPrice = 20.00m,
-                            OldPrice = 0m,
-                            Rating = 0.0
+                            OldPrice = 0m
                         },
                         new
                         {
@@ -406,8 +404,7 @@ namespace Ecom.Infrastructure.Data.Migrations
                             Description = "test3",
                             Name = "test3",
                             NewPrice = 30.00m,
-                            OldPrice = 0m,
-                            Rating = 0.0
+                            OldPrice = 0m
                         });
                 });
 

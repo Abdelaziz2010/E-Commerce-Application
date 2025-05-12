@@ -4,9 +4,6 @@ using Ecom.Application.DTOs.Order;
 using Ecom.Application.Interfaces.Repositories;
 using Ecom.Domain.Entities;
 using Ecom.Presentation.Helpers;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
