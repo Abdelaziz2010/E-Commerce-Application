@@ -54,7 +54,7 @@ namespace Ecom.Presentation.Controllers
                 Secure = true,
                 IsEssential = true,
                 Domain = "localhost",
-                Expires = DateTime.UtcNow.AddMinutes(30)
+                Expires = DateTime.UtcNow.AddDays(1)
             });
 
             return Ok(new ResponseAPI(200));
