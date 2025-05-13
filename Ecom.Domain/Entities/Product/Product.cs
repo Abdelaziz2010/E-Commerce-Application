@@ -18,7 +18,6 @@ namespace Ecom.Domain.Entities.Product
         // Navigation properties
         [ForeignKey(nameof(CategoryId))]
         public virtual Category Category { get; set; }
-        
         public double Rating { get; set; } 
     }
 }

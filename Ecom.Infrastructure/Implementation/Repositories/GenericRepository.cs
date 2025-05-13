@@ -1,13 +1,7 @@
 ﻿using Ecom.Application.Interfaces.Repositories;
 using Ecom.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Net.WebSockets;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ecom.Infrastructure.Implementation.Repositories
 {
@@ -25,7 +19,6 @@ namespace Ecom.Infrastructure.Implementation.Repositories
 
             return query;
         }
-
 
         //The order of includes matters for performance (larger collections should come last)
         public async Task<IReadOnlyList<T>> GetAllAsync(params Expression<Func<T, object>>[] includes)
@@ -50,8 +43,7 @@ namespace Ecom.Infrastructure.Implementation.Repositories
             return entity;
         }
 
-        //var order = await repository.GetByIdAsync(
-        //123,o => o.Customer,o => o.Items, o => o.Shipping);
+        //var order = await repository.GetByIdAsync(123, o => o.Customer, o => o.Items, o => o.Shipping);
         public async Task<T> GetByIdAsync(int id, params Expression<Func<T, object>>[] includes)
         {
             var query = _context.Set<T>().AsQueryable();

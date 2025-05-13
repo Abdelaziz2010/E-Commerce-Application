@@ -24,6 +24,7 @@ namespace Ecom.Infrastructure.Implementation.Repositories
         private IPhotoRepository _photoRepository;
         private ICartRepository _cartRepository;
         private IAuthRepository _authRepository;
+        private IReviewRepository _reviewRepository;
 
         public UnitOfWork(
             AppDbContext context, 
@@ -99,6 +100,17 @@ namespace Ecom.Infrastructure.Implementation.Repositories
                     _authRepository = new AuthRepository(_userManager, _signInManager, _emailService, _tokenService, _context);
                 }
                 return _authRepository;
+            }
+        }
+        public IReviewRepository ReviewRepository
+        {
+            get
+            {
+                if (_reviewRepository == null)
+                {
+                    _reviewRepository = new ReviewRepository(_context, _userManager, _mapper);
+                }
+                return _reviewRepository;
             }
         }
     }

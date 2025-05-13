@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace Ecom.Application.Interfaces.Repositories
 {
@@ -13,5 +9,6 @@ namespace Ecom.Application.Interfaces.Repositories
         IPhotoRepository PhotoRepository { get; }
         ICartRepository CartRepository { get; }
         IAuthRepository AuthRepository { get; }
+        IReviewRepository ReviewRepository { get; }
     }
 }

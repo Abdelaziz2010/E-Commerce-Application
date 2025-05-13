@@ -8,5 +8,6 @@
         public decimal OldPrice { get; set; }
         public List<PhotoDTO> Photos { get; set; }
         public string CategoryName { get; set; }
+        public double Rating { get; set; }
     }
 }

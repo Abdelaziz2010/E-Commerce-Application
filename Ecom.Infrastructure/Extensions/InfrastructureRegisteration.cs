@@ -40,7 +40,10 @@ namespace Ecom.Infrastructure.Extensions
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             // register Identity service
-            services.AddIdentity<AppUser, IdentityRole> ().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+            services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+
+            // Register Token Service
+            //services.AddScoped<ITokenService, TokenService>();
 
             // register payment service
             services.AddScoped<IPaymentService, PaymentService>();
