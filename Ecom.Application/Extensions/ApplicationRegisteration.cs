@@ -22,11 +22,7 @@ namespace Ecom.Application.Extensions
             // Register Email Service
             services.AddScoped<IEmailService, EmailService>();
 
-            // Register Token Service
-            services.AddScoped<ITokenService, TokenService>();
-
             return services;
         }
-
     }
 }

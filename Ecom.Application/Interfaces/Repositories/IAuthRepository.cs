@@ -13,5 +13,6 @@ namespace Ecom.Application.Interfaces.Repositories
         Task<Address> GetUserAddress(string email);
         Task<bool> UpdateOrCreateAddress(string email, Address address);
         Task<AppUser> GetUserInfo(string email);
+        Task<bool> DeleteUserAsync(string email);
     }
 }

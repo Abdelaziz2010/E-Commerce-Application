@@ -4,11 +4,12 @@ using Ecom.Application.DTOs.Order;
 using Ecom.Application.Interfaces.Repositories;
 using Ecom.Domain.Entities;
 using Ecom.Presentation.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace Ecom.Presentation.Controllers
-{
+{ 
     public class AccountController : BaseController
     {
         public AccountController(IUnitOfWork work, IMapper mapper) : base(work, mapper)
@@ -82,6 +83,7 @@ namespace Ecom.Presentation.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("Get-User-Info")]
         public async Task<IActionResult> GetUserInfo()
         {
@@ -103,7 +105,8 @@ namespace Ecom.Presentation.Controllers
 
             return Ok(userDTO);
         }
-
+        
+        [Authorize]
         [HttpGet("Get-User-Name")]
         public IActionResult GetUserName()
         {
@@ -149,6 +152,7 @@ namespace Ecom.Presentation.Controllers
             return BadRequest(new ResponseAPI(400, result));
         }
 
+        [Authorize]
         [HttpGet("Get-User-Address")]
         public async Task<IActionResult> GetUserAddress()
         {
@@ -171,6 +175,7 @@ namespace Ecom.Presentation.Controllers
             return Ok(addressDTO);
         }
 
+        [Authorize]
         [HttpPut("Update-Or-Create-Address")]
         public async Task<IActionResult> UpdateOrCreateAddress(ShippingAddressDTO shippingAddressDTO)
         {
@@ -198,6 +203,22 @@ namespace Ecom.Presentation.Controllers
         {
             // Check if the user is authenticated.
             return User.Identity.IsAuthenticated ? Ok(new ResponseAPI(200)) : Unauthorized(new ResponseAPI(401));
+        }
+
+        [Authorize]
+        [HttpDelete("Delete-User")]
+        public async Task<IActionResult> DeleteUser()
+        {
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+           
+            if (string.IsNullOrEmpty(email))
+            {
+                return NotFound(new ResponseAPI(404));
+            }
+
+            var result = await work.AuthRepository.DeleteUserAsync(email);
+
+            return result ? Ok(new ResponseAPI(200)) : BadRequest(new ResponseAPI(400));
         }
     }
 }

@@ -255,5 +255,29 @@ namespace Ecom.Infrastructure.Implementation.Repositories
 
             return user;
         }
+
+        public async Task<bool> DeleteUserAsync(string email)
+        {
+            if(email is null)
+            {
+                return false;
+            }
+
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if(user is null)
+            {
+                return false;
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+
+            if (result.Succeeded)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

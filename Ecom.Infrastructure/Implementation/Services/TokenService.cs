@@ -1,20 +1,23 @@
 ﻿using Ecom.Application.Services.Interfaces;
 using Ecom.Domain.Entities;
+using Ecom.Infrastructure.Data;
 using Microsoft.Extensions.Configuration;
-using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-namespace Ecom.Application.Services.Implementation
+namespace Ecom.Infrastructure.Implementation.Services
 {
     // Here you would implement the logic to generate a JWT token and Refresh token for the user
     public class TokenService : ITokenService
     {
         private readonly IConfiguration _configuration;
-        public TokenService(IConfiguration configuration)
+        private readonly AppDbContext _context;
+        public TokenService(IConfiguration configuration, AppDbContext context)
         {
             _configuration = configuration;
+            _context = context;
         }
 
         public string GenerateAccessToken(AppUser user)
@@ -50,7 +53,7 @@ namespace Ecom.Application.Services.Implementation
             SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
 
             string tokenString = tokenHandler.WriteToken(token);
-           
+
             return tokenString;
         }
 

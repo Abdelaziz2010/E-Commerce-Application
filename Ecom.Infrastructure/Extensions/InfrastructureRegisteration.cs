@@ -43,7 +43,7 @@ namespace Ecom.Infrastructure.Extensions
             services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
             // Register Token Service
-            //services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<ITokenService, TokenService>();
 
             // register payment service
             services.AddScoped<IPaymentService, PaymentService>();
