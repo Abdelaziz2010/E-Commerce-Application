@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Ecom.Application.Interfaces.Repositories;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecom.Presentation.Controllers
@@ -45,7 +44,5 @@ namespace Ecom.Presentation.Controllers
         {
             return BadRequest();
         }
-
-
     }
 }

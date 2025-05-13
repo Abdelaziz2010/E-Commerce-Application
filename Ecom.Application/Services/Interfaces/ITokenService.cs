@@ -1,9 +1,5 @@
 ﻿using Ecom.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace Ecom.Application.Services.Interfaces
 {
@@ -11,5 +7,8 @@ namespace Ecom.Application.Services.Interfaces
     {
         string GenerateAccessToken(AppUser user);
         RefreshToken GenerateRefreshToken(string userId);
+        Task SetRefreshToken(RefreshToken newRefreshToken, HttpResponse response);
+        Task RevokeRefreshToken(string refreshToken);
+        Task RevokeAllRefreshTokens(string userId);
     }
 }

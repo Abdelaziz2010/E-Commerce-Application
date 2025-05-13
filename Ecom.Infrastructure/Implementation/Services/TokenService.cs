@@ -1,6 +1,8 @@
 ﻿using Ecom.Application.Services.Interfaces;
 using Ecom.Domain.Entities;
 using Ecom.Infrastructure.Data;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -65,6 +67,46 @@ namespace Ecom.Infrastructure.Implementation.Services
                 ExpiredAt = DateTime.UtcNow.AddDays(10),
                 UserId = userId
             };
+        }
+
+        public async Task SetRefreshToken(RefreshToken newRefreshToken, HttpResponse response)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = newRefreshToken.ExpiredAt,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Domain = "localhost"
+            };
+
+            response.Cookies.Append("RefreshToken", newRefreshToken.Token, cookieOptions);
+
+            await _context.RefreshTokens.AddAsync(newRefreshToken);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RevokeRefreshToken(string refreshToken)
+        {
+            var token = await _context.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == refreshToken);
+
+            if (token != null)
+            {
+                token.Revoked = DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task RevokeAllRefreshTokens(string userId)
+        {
+            var tokens = await _context.RefreshTokens.Where(rt => rt.UserId == userId && rt.IsActive).ToListAsync();
+
+            foreach (var token in tokens)
+            {
+                token.Revoked = DateTime.UtcNow;
+            }
+
+            await _context.SaveChangesAsync();
         }
     }
 }
