@@ -282,4 +282,4 @@ Response:
 ## Links
 - **Project Repository: https://github.com/Abdelaziz2010/E-Commerce-Application**
 
-- **Frontend demo(Vibe Coding using Lovable ai):** https://commerce-forge-front.lovable.app/
+- **Frontend demo (Vibe Coding using Lovable ai): https://commerce-forge-front.lovable.app/**
