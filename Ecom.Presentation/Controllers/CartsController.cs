@@ -2,7 +2,6 @@
 using Ecom.Application.Interfaces.Repositories;
 using Ecom.Domain.Entities;
 using Ecom.Presentation.Helpers;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecom.Presentation.Controllers

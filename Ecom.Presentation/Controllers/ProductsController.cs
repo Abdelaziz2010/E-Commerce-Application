@@ -2,9 +2,7 @@
 using Ecom.Application.DTOs.Product;
 using Ecom.Application.Interfaces.Repositories;
 using Ecom.Application.Shared;
-using Ecom.Domain.Entities.Product;
 using Ecom.Presentation.Helpers;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecom.Presentation.Controllers
