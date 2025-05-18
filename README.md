@@ -240,33 +240,28 @@ POST /api/Products/Add-Product
 Authorization: Bearer <your-jwt-token>
 
 Content-Type: application/json
-
+```json
 {
-
   "name": "Premium Wireless Headphones",
-
   "description": "Noise-cancelling Bluetooth headphones",
-
   "Newprice": 299.99,
-
   "OldPrice": 350.34,
-
   "categoryId": 5,
-
   "Photos":[]
-
 }
+```
 
 	
 Response:
 
+
+
+```json
 {
-
   "statusCode": 200,
-
   "message": "Product created successfully"
-
 }
+```
 
 ---
 
