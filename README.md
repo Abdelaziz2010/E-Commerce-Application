@@ -5,6 +5,10 @@
 [![SQL Server](https://img.shields.io/badge/SQL_Server-2019+-CC2927?logo=microsoft-sql-server)](https://www.microsoft.com/sql-server)
 [![Redis](https://img.shields.io/badge/Redis-%23DC382D.svg?logo=redis&logoColor=white)](https://redis.io)
 [![Stripe](https://img.shields.io/badge/Stripe-626CD9?logo=stripe&logoColor=white)](https://stripe.com)
+[![Entity Framework](https://img.shields.io/badge/Entity_Framework_Core-8.0-6DB33F?logo=ef&logoColor=white)](https://docs.microsoft.com/ef/)
+[![Postman](https://img.shields.io/badge/Postman-API-orange?logo=postman)](https://www.postman.com/)
+[![Swagger](https://img.shields.io/badge/Swagger-UI-85EA2D?logo=swagger)](https://swagger.io/)
+[![AutoMapper](https://img.shields.io/badge/AutoMapper-9.0-FF6F00?logo=automapper&logoColor=white)](https://automapper.org/)
 
 ---
 
@@ -235,12 +239,10 @@ A comprehensive backend API for ecommerce system, featuring secure payment proce
 ## 📝 Request/Response Examples: 
 *Sample Product Creation Request:*
 
-POST /api/Products/Add-Product
-
-Authorization: Bearer <your-jwt-token>
-
-Content-Type: application/json
 ```json
+POST /api/Products/Add-Product
+Authorization: Bearer <your-jwt-token>
+Content-Type: application/json
 {
   "name": "Premium Wireless Headphones",
   "description": "Noise-cancelling Bluetooth headphones",
@@ -251,12 +253,9 @@ Content-Type: application/json
 }
 ```
 
-	
-Response:
-
-
 
 ```json
+Response:
 {
   "statusCode": 200,
   "message": "Product created successfully"
