@@ -4,6 +4,7 @@ using Ecom.Presentation.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using System.Security.Claims;
 
 namespace Ecom.Presentation.Controllers
@@ -19,6 +20,7 @@ namespace Ecom.Presentation.Controllers
             _orderService = orderService;
         }
 
+        [EnableRateLimiting("WritePolicy")]
         [HttpPost("Create-Order")]
         public async Task<IActionResult> CreateOrder([FromBody] OrderDTO orderDTO)
         {
@@ -39,6 +41,7 @@ namespace Ecom.Presentation.Controllers
             return Ok(order);
         }
 
+        [EnableRateLimiting("ReadOnlyPolicy")]
         [HttpGet("Get-All-Orders-For-User")]
         public async Task<IActionResult> GetAllOrdersForUser()
         {

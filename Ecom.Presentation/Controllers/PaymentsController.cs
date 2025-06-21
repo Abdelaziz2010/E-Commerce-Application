@@ -5,6 +5,7 @@ using Ecom.Presentation.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Stripe;
 
 namespace Ecom.Presentation.Controllers
@@ -25,6 +26,7 @@ namespace Ecom.Presentation.Controllers
             _configuration = configuration;
         }
 
+        [EnableRateLimiting("WritePolicy")]
         [HttpPost("Create-Or-Update-Payment")]
         public async Task<ActionResult<Cart>> CreateOrUpdate(string cartId, int? deliveryMethodId)
         {

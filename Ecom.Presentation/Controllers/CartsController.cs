@@ -3,6 +3,7 @@ using Ecom.Application.Interfaces.Repositories;
 using Ecom.Domain.Entities;
 using Ecom.Presentation.Helpers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace Ecom.Presentation.Controllers
 {
@@ -33,6 +34,7 @@ namespace Ecom.Presentation.Controllers
             }
         }
 
+        [EnableRateLimiting("WritePolicy")]
         [HttpPost("Update-Or-Create")]
         public async Task<IActionResult> UpdateOrCreate(Cart cart)
         {
@@ -53,6 +55,7 @@ namespace Ecom.Presentation.Controllers
             }
         }
 
+        [EnableRateLimiting("WritePolicy")]
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> Delete(string id)
         {

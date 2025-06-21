@@ -2,6 +2,7 @@
 using Ecom.Infrastructure.Extensions;
 using Ecom.Application.Extensions;
 using Ecom.Presentation.Middlewares;
+using Ecom.Presentation.Extensions;
 
 namespace Ecom.Presentation
 {
@@ -36,6 +37,8 @@ namespace Ecom.Presentation
 
             // Pass the configuration to AddInfrastructureServices
             
+            builder.Services.AddPresentationServices(builder.Configuration);
+
             builder.Services.AddInfrastructureServices(builder.Configuration);
 
             builder.Services.AddApplicationServices();
@@ -65,6 +68,9 @@ namespace Ecom.Presentation
             app.UseMiddleware<ExceptionsMiddleware>();
 
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
+
+            // Use Rate Limiter globally
+            app.UseRateLimiter();
 
             app.UseAuthentication();
             
