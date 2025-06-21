@@ -4,6 +4,7 @@ using Ecom.Application.Interfaces.Repositories;
 using Ecom.Presentation.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using System.Security.Claims;
 
 namespace Ecom.Presentation.Controllers
@@ -16,6 +17,7 @@ namespace Ecom.Presentation.Controllers
 
         }
 
+        [EnableRateLimiting("ReadOnlyPolicy")]
         [HttpGet("Get-All-Reviews-For-Product/{productId}")]
         public async Task<IActionResult> GetAllReviewsForProduct(int productId)
         {
@@ -29,6 +31,8 @@ namespace Ecom.Presentation.Controllers
             return Ok(reviews);
         }
 
+
+        [EnableRateLimiting("WritePolicy")]
         [HttpPost("Add-Review")]
         public async Task<IActionResult> AddReview(ReviewDTO reviewDTO)
         {
@@ -49,6 +53,7 @@ namespace Ecom.Presentation.Controllers
             return result ? Ok(new ResponseAPI(200)) : BadRequest(new ResponseAPI(400));
         }
 
+        [EnableRateLimiting("WritePolicy")]
         [HttpDelete("Delete-Review/{reviewId}")]
         public async Task<IActionResult> DeleteReview(int reviewId)
         {

@@ -4,6 +4,7 @@ using Ecom.Application.Interfaces.Repositories;
 using Ecom.Application.Shared;
 using Ecom.Presentation.Helpers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace Ecom.Presentation.Controllers
 {
@@ -13,6 +14,7 @@ namespace Ecom.Presentation.Controllers
         {
         }
 
+        [EnableRateLimiting("ReadOnlyPolicy")]
         [HttpGet("Get-All")]
         public async Task<IActionResult> GetAll([FromQuery]ProductParams productParams)
         {
@@ -34,6 +36,7 @@ namespace Ecom.Presentation.Controllers
             }
         }
 
+        [EnableRateLimiting("ReadOnlyPolicy")]
         [HttpGet("Get-By-Id/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -58,6 +61,7 @@ namespace Ecom.Presentation.Controllers
         }
 
 
+        [EnableRateLimiting("WritePolicy")]
         [HttpPost("Add-Product")]
         public async Task<IActionResult> Add(AddProductDTO productDTO)
         {
@@ -73,6 +77,7 @@ namespace Ecom.Presentation.Controllers
             }
         }
 
+        [EnableRateLimiting("WritePolicy")]
         [HttpPut("Update-Product")]
         public async Task<IActionResult> Update(UpdateProductDTO updateProductDTO)
         {
@@ -89,6 +94,7 @@ namespace Ecom.Presentation.Controllers
         }
 
 
+        [EnableRateLimiting("WritePolicy")]
         [HttpDelete("Delete-Product/{id}")]
         public async Task<IActionResult> Delete(int id)
         {

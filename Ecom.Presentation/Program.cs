@@ -66,6 +66,9 @@ namespace Ecom.Presentation
 
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
+            // Use Rate Limiter globally
+            app.UseRateLimiter();
+
             app.UseAuthentication();
             
             app.UseAuthorization();

@@ -4,6 +4,7 @@ using Ecom.Application.Interfaces.Repositories;
 using Ecom.Domain.Entities.Product;
 using Ecom.Presentation.Helpers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace Ecom.Presentation.Controllers
 {
@@ -25,6 +26,7 @@ namespace Ecom.Presentation.Controllers
         //Forbid
         //NoContent
 
+        [EnableRateLimiting("ReadOnlyPolicy")]
         [HttpGet("Get-All")]
         public async Task<IActionResult> GetAll()
         {
@@ -44,6 +46,7 @@ namespace Ecom.Presentation.Controllers
             }            
         }
 
+        [EnableRateLimiting("ReadOnlyPolicy")]
         [HttpGet("Get-By-Id/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
