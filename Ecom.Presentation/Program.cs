@@ -1,8 +1,10 @@
 
-using Ecom.Infrastructure.Extensions;
+using Asp.Versioning.ApiExplorer;
 using Ecom.Application.Extensions;
-using Ecom.Presentation.Middlewares;
+using Ecom.Infrastructure.Extensions;
 using Ecom.Presentation.Extensions;
+using Ecom.Presentation.Helpers;
+using Ecom.Presentation.Middlewares;
 
 namespace Ecom.Presentation
 {
@@ -32,8 +34,13 @@ namespace Ecom.Presentation
             builder.Services.AddControllers();
             
             builder.Services.AddEndpointsApiExplorer();
-            
+
+            // swagger
             builder.Services.AddSwaggerGen();
+
+            builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
+
+            builder.Services.AddSingleton<IApiVersionDescriptionProvider, DefaultApiVersionDescriptionProvider>();
 
             // Pass the configuration to AddInfrastructureServices
             
@@ -52,8 +59,18 @@ namespace Ecom.Presentation
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+                var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
+
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                
+                app.UseSwaggerUI(options =>
+                {
+                    foreach (var description in provider.ApiVersionDescriptions)
+                    {
+                        options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json",
+                                                description.GroupName.ToUpperInvariant());
+                    }
+                });
             }
 
             // Enable CORS
