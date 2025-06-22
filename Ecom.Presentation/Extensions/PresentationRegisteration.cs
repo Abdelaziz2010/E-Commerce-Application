@@ -1,4 +1,6 @@
 ﻿using Asp.Versioning;
+using Ecom.Presentation.Helpers;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Threading.RateLimiting;
 
 namespace Ecom.Presentation.Extensions
@@ -79,6 +81,21 @@ namespace Ecom.Presentation.Extensions
                 options.GroupNameFormat = "'v'VVV";       // Format for versioned API groups
                 options.SubstituteApiVersionInUrl = true; // Substitute version in URL
             });
+
+            #endregion
+
+
+            // register the health checks in services container 
+            #region Health Check Configurations
+
+            services.AddHealthChecks()
+                      .AddSqlServer(
+                          connectionString: configuration.GetConnectionString("EcomDatabase"),
+                          healthQuery: "SELECT 1;", // Query to check database health.
+                          name: "sqlserver",
+                          failureStatus: HealthStatus.Degraded, // Degraded health status if the check fails.
+                          tags: new[] { "db", "sql" })
+                      .AddCheck("Memory", new ManagedMemoryHealthCheck(1024 * 1024 * 1024)); // A custom health check for managed memory. 
 
             #endregion
 

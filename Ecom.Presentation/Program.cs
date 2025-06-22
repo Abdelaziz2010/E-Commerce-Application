@@ -5,6 +5,7 @@ using Ecom.Infrastructure.Extensions;
 using Ecom.Presentation.Extensions;
 using Ecom.Presentation.Helpers;
 using Ecom.Presentation.Middlewares;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 namespace Ecom.Presentation
 {
@@ -72,6 +73,42 @@ namespace Ecom.Presentation
                     }
                 });
             }
+
+
+            #region Health Check
+
+            // Top-level route mapping for health checks
+            app.MapHealthChecks("/health", new HealthCheckOptions
+            {
+                ResponseWriter = HealthCheckResponseWriter.WriteJsonResponse
+            });
+
+
+            // Liveness probe, Purpose: Tells if the app is running.
+            app.MapHealthChecks("/health/live", new HealthCheckOptions
+            {
+                Predicate = _ => false, // No specific checks, just indicates the app is live
+                ResponseWriter = async (context, report) =>
+                {
+                    context.Response.ContentType = "application/json";
+                    var json = new
+                    {
+                        status = report.Status.ToString(),
+                        description = "Liveness check - the app is up"
+                    };
+                    await context.Response.WriteAsJsonAsync(json);
+                }
+            });
+
+
+            // Readiness probe, Tells if the app is ready to handle requests
+            app.MapHealthChecks("/health/ready", new HealthCheckOptions
+            {
+                Predicate = check => check.Tags.Contains("ready"), // Only run checks tagged as "ready"
+                ResponseWriter = HealthCheckResponseWriter.WriteJsonResponse
+            });
+
+            #endregion
 
             // Enable CORS
             app.UseCors("CORSPolicy");
