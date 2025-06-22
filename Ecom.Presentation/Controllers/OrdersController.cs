@@ -1,4 +1,5 @@
-﻿using Ecom.Application.DTOs.Order;
+﻿using Asp.Versioning;
+using Ecom.Application.DTOs.Order;
 using Ecom.Application.Services.Interfaces;
 using Ecom.Presentation.Helpers;
 using Microsoft.AspNetCore.Authorization;
@@ -9,7 +10,8 @@ using System.Security.Claims;
 
 namespace Ecom.Presentation.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [Authorize]
     public class OrdersController : ControllerBase

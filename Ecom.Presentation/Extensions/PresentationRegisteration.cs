@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+﻿using Asp.Versioning;
 using System.Threading.RateLimiting;
 
 namespace Ecom.Presentation.Extensions
@@ -8,7 +8,7 @@ namespace Ecom.Presentation.Extensions
         public static IServiceCollection AddPresentationServices(this IServiceCollection services, IConfiguration configuration)
         {
 
-            // Add Rate Limiting globally
+            // register rate limiter to the service collection
             #region Rate Limiting Configurations
 
             services.AddRateLimiter(options =>
@@ -56,6 +56,28 @@ namespace Ecom.Presentation.Extensions
                     context.HttpContext.Response.ContentType = "application/json";
                     await context.HttpContext.Response.WriteAsync("{\"error\": \"You are being rate limited. Please try again later.\"}",token);
                 };
+            });
+
+            #endregion
+
+
+            // register api versioning to the service collection
+            #region API Versioning Cpnfigurations
+
+            services.AddApiVersioning(options =>
+            {
+                options.DefaultApiVersion = new ApiVersion(1, 0);      // Set default API version
+                options.AssumeDefaultVersionWhenUnspecified = true;    // Use default version if not specified
+                options.ReportApiVersions = true;                      // Report API versions in response headers
+                options.ApiVersionReader = ApiVersionReader.Combine(
+                    new QueryStringApiVersionReader("api-version"),
+                    new HeaderApiVersionReader("X-Version"),
+                    new UrlSegmentApiVersionReader()
+                );
+            }).AddApiExplorer(options =>
+            {
+                options.GroupNameFormat = "'v'VVV";       // Format for versioned API groups
+                options.SubstituteApiVersionInUrl = true; // Substitute version in URL
             });
 
             #endregion

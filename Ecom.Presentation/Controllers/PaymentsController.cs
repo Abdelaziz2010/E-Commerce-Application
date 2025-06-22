@@ -1,4 +1,5 @@
-﻿using Ecom.Application.Services.Interfaces;
+﻿using Asp.Versioning;
+using Ecom.Application.Services.Interfaces;
 using Ecom.Domain.Entities;
 using Ecom.Domain.Entities.Orders;
 using Ecom.Presentation.Helpers;
@@ -10,7 +11,8 @@ using Stripe;
 
 namespace Ecom.Presentation.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [Authorize]
     public class PaymentsController : ControllerBase
