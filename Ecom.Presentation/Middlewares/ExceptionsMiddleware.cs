@@ -1,4 +1,5 @@
 ﻿using Ecom.Presentation.Helpers;
+using Serilog;
 using System.Net;
 using System.Text.Json;
 
@@ -22,6 +23,9 @@ namespace Ecom.Presentation.Middlewares
             }
             catch (Exception ex)
             {
+                // Logging the exception
+                Log.Error(ex, "Unhandled Exception occurred while processing request to {Path}", context.Request.Path);
+
                 context.Response.ContentType = "application/json";
 
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;

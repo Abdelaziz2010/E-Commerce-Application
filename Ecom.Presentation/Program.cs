@@ -1,4 +1,3 @@
-
 using Asp.Versioning.ApiExplorer;
 using Ecom.Application.Extensions;
 using Ecom.Infrastructure.Extensions;
@@ -6,6 +5,7 @@ using Ecom.Presentation.Extensions;
 using Ecom.Presentation.Helpers;
 using Ecom.Presentation.Middlewares;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Serilog;
 
 namespace Ecom.Presentation
 {
@@ -15,7 +15,15 @@ namespace Ecom.Presentation
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+
+            // Configure Serilog, used to log during startup (before the app is built)
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(builder.Configuration) // Reads from appsettings.json
+                .CreateLogger();
+
+            builder.Host.UseSerilog();
+
+            Log.Information("Starting the Ecom API.....");
 
             // Add CORS configurations policy to allow requests from the client app
 
@@ -115,9 +123,11 @@ namespace Ecom.Presentation
             
             app.UseHttpsRedirection();
 
-            app.UseMiddleware<RateLimitingMiddleware>();
+            // app.UseMiddleware<RateLimitingMiddleware>();
 
             app.UseMiddleware<SecurityHeadersMiddleware>();
+
+            app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
             app.UseMiddleware<ExceptionsMiddleware>();
 
